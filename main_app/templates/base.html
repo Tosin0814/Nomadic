@@ -14,8 +14,27 @@
 
     <header>
         <nav>
-            
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="#">Nomadic</a> </li>
+                {% block title %}
+                
+                {% endblock %}
+                
+                {% if user.is_authenticated %}
+                    {% if profile_id %}
+                        <li class="nav-item"><a class="nav-link" href="#">My Profile</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="#">My Reservation</a></li>
+                    {% endif %}
+                        <li class="nav-item "><a class="nav-link" href="#">Logout</a></li>  
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="#">Create Account</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
+                {% endif %}
+            </ul>
         </nav>
+        
     </header>
 
     <main>
