@@ -15,7 +15,7 @@
     <header>
         <nav class="navbar navbar-expand-sm bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Nomadic</a>
+                <a class="navbar-brand" href="{% url 'index' %}">Nomadic</a>
                 
                 <ul class="navbar-nav justify-content-end">
                     {% block title %}
@@ -31,10 +31,10 @@
                             {% else %}
                                 <li class="nav-item"><a class="nav-link" href="#">My Reservation</a></li>
                             {% endif %}
-                                <li class="nav-item "><a class="nav-link" href="#">Logout</a></li>  
+                                <li class="nav-item "><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>  
                         {% else %}
-                            <li class="nav-item"><a class="nav-link" href="#">Create Account</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Create Account</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
                         {% endif %}
                     </ul>
                 </div>
