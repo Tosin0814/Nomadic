@@ -37,3 +37,4 @@ def signup(request):
 
 def create_profile(request):
   return render(request, 'profile/createprofile.html')
+  
