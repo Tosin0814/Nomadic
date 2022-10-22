@@ -32,13 +32,24 @@ RATINGS = (
 class Profile(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    email = models.EmailField()
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     date_joined = models.DateField(auto_now_add=True)
-    profile_photo = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+    
+    def get_absolute_url(self):
+        return reverse('profile', kwargs={'profile_id': self.id, 'user_id': self.user.id})
 
+
+class ProfilePicture(models.Model):
+    url = models.CharField(max_length=200)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        # For obtaining the friendly value of a Field.choice
+        return f"Photo created on {self.date_created}"
 
 class PropertyFeature(models.Model):
     feature = models.CharField(
@@ -75,7 +86,7 @@ class Photo(models.Model):
     date_created = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        # Nice method for obtaining the friendly value of a Field.choice
+        # For obtaining the friendly value of a Field.choice
         return f"Photo created on {self.date_created}"
 
     class Meta:

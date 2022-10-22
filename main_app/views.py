@@ -25,7 +25,7 @@ def signup(request):
       user = form.save()
       # Login after signing up
       login(request, user)
-      return render(request, 'profile/createprofile.html')
+      return redirect('create_profile', user_id = user.id)
     else:
       error_message = 'Invalid sign up - try again'
   # A bad POST or a GET request, so render signup.html with an empty form
@@ -35,6 +35,10 @@ def signup(request):
 
 
 
-def create_profile(request):
-  return render(request, 'profile/createprofile.html')
+# def create_profile(request):
+#   return render(request, 'profile/createprofile.html')
+
+class CreateProfile(CreateView):
+  model = Profile
+  fields = ['first_name', 'last_name', 'email']
   

@@ -1,10 +1,11 @@
 from django.contrib import admin
-from .models import Photo, Profile, Like, Review, PropertyFeature, Property, Availability
+from .models import Photo, Profile, Like, Review, PropertyFeature, Property, Availability, ProfilePicture
 
 # Register your models here
 admin.site.register(Photo)
 admin.site.register(Property)
 admin.site.register(Profile)
+admin.site.register(ProfilePicture)
 admin.site.register(Like)
 admin.site.register(Review)
 admin.site.register(PropertyFeature)
