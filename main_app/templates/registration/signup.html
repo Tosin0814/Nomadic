@@ -11,7 +11,7 @@
     {% if error_message %}
         <p class="red-text">{{ error_message }}</p>
     {% endif %}
-    <form method="post" action="{% url 'signup_host' %}">
+    <form method="post" action="{% url 'signup' %}">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" class="btn btn-primary" value="Create Account">
