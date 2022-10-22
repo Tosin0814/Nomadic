@@ -13,28 +13,34 @@
 <body>
 
     <header>
-        <nav>
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="#">Nomadic</a> </li>
-                {% block title %}
+        <nav class="navbar navbar-expand-sm bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Nomadic</a>
                 
-                {% endblock %}
-                
-                {% if user.is_authenticated %}
-                    {% if profile_id %}
-                        <li class="nav-item"><a class="nav-link" href="#">My Profile</a></li>
-                    {% else %}
-                        <li class="nav-item"><a class="nav-link" href="#">My Reservation</a></li>
-                    {% endif %}
-                        <li class="nav-item "><a class="nav-link" href="#">Logout</a></li>  
-                {% else %}
-                    <li class="nav-item"><a class="nav-link" href="#">Create Account</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
-                {% endif %}
-            </ul>
+                <ul class="navbar-nav justify-content-end">
+                    {% block title %}
+                        
+                    {% endblock %}
+                </ul>
+
+                <div class="navbar-nav justify-content-end">
+                    <ul class="navbar-nav">
+                        {% if user.is_authenticated %}
+                            {% if profile_id %}
+                                <li class="nav-item active"><a class="nav-link" href="#">My Profile</a></li>
+                            {% else %}
+                                <li class="nav-item"><a class="nav-link" href="#">My Reservation</a></li>
+                            {% endif %}
+                                <li class="nav-item "><a class="nav-link" href="#">Logout</a></li>  
+                        {% else %}
+                            <li class="nav-item"><a class="nav-link" href="#">Create Account</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+
         </nav>
-        
     </header>
 
     <main>
