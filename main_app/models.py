@@ -3,7 +3,6 @@ from django.db import models
 from django.forms import DateField
 from django.urls import reverse
 from datetime import datetime, date  
-from django.core.validators import MaxValueValidator, MinValueValidator, DecimalValidator
 from django.contrib.auth.models import User
 
 
@@ -28,21 +27,6 @@ RATINGS = (
     ('S', 'Stay Away')
 )
 
-
-class Profile(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    email = models.EmailField()
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    date_joined = models.DateField(auto_now_add=True)
-
-    def __str__(self):
-        return f'{self.first_name} {self.last_name}'
-    
-    def get_absolute_url(self):
-        return reverse('profile', kwargs={'profile_id': self.id, 'user_id': self.user.id})
-
-
 class ProfilePicture(models.Model):
     url = models.CharField(max_length=200)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -50,6 +34,7 @@ class ProfilePicture(models.Model):
     def __str__(self):
         # For obtaining the friendly value of a Field.choice
         return f"Photo created on {self.date_created}"
+
 
 class PropertyFeature(models.Model):
     feature = models.CharField(
@@ -104,6 +89,7 @@ class Availability(models.Model):
 
     class Meta:
         ordering = ['from_date']
+
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
