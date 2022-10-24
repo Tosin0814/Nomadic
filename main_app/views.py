@@ -8,8 +8,8 @@ from .models import User, Property, PropertyFeature, Photo, Availability, Like, 
 
 
 # Define the home view
-def index(request):
-  return render(request, 'property/index.html')
+# def index(request):
+#   return render(request, 'property/index.html')
 
 def choose_signup(request):
   return render(request, 'registration/choose_signup.html')
@@ -38,3 +38,55 @@ def signup(request):
 class ProfilePage(DetailView):
   model = User
   template_name = 'user/profile.html'
+
+
+
+
+# New code here
+class ProfileView(DetailView):
+  model = User
+  template_name = 'user/profile.html'
+
+class ProfileUpdate(UpdateView):
+  model = User
+  template_name = 'user/updateuser.html'
+  fields = ['first_name', 'last_name', 'email']
+  success_url = '/'
+
+class ProfileDelete(DeleteView):
+  model = User
+  template_name = 'user/confirm_delete.html'
+  success_url = '/'
+
+class PropertyList(ListView):
+  model = Property
+  template_name = 'property/index.html'
+
+
+def property_detail(request, property_id):
+  property = Property.objects.get(id=property_id)
+  # Add review form
+  # Add property features not alredy on list
+  return render(request, 'property/detail.html',{
+    'property': property,
+    # Pass review form
+    # Pass property features
+  })
+
+class PropertyCreate(CreateView):
+  model = Property
+  fields = ['title', 'description', 'location', 'price']
+  template_name = 'property/createproperty.html'
+  def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class PropertyUpdate(UpdateView):
+  model = Property
+  fields = ['title', 'description', 'location', 'price']
+  template_name = 'property/createproperty.html'
+
+class PropertyDelete(DeleteView):
+  model = Property
+  template_name = 'property/confirm_delete.html'
+  success_url = '/'

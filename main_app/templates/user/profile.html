@@ -1,4 +1,17 @@
 {% extends 'base.html' %}
 {% block title%}
-    <li class="nav-item">Profile</li>
+    <h3>{{user.username}}'s Profile</h3>
+{% endblock %}
+
+{% block content %}
+    <h2>{{user.username}}</h2>
+    <p>First Name: {{ user.first_name}}</p>
+    <p>Last Name: {{ user.last_name}}</p>
+    <p>Email: {{ user.email}}</p>
+    {% if user.id == request.user.id %}
+    <div class="card-action">
+        <a class="text-decoration-none" href="{% url 'profile_update' user.id %}"><button class="btn btn-primary">Edit</button></a>
+        <a class="text-decoration-none" href="{% url 'profile_delete' user.id %}"><button class="btn btn-danger">Delete</button></a>
+    </div>
+    {% endif %}
 {% endblock %}

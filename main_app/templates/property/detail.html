@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title%}
+<h3>Property Details</h3>
+{% endblock %}
+
+{% block content %}
+<div>
+    <p>{{property.title}}</p>
+    <p>{{property.description}}</p>
+    <p>{{property.location}}</p>
+    <p>{{property.price}} CAD per night</p>
+    <p>{{property.date_listed}}</p>
+    <p>Posted by {{property.user.username}}</p> <!--Add link to creator profile-->
+    {% if property.user == request.user %}
+        <div class="card-action">
+            <a class="text-decoration-none" href="{% url 'property_update' property.id %}"><button class="btn btn-primary">Edit</button></a>
+            <a class="text-decoration-none" href="{% url 'property_delete' property.id %}"><button class="btn btn-danger">Delete</button></a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
