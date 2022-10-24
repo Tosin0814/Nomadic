@@ -6,17 +6,65 @@
 
 {% block content %}
 <div>
-    <p>{{property.title}}</p>
-    <p>{{property.description}}</p>
-    <p>{{property.location}}</p>
-    <p>{{property.price}} CAD per night</p>
-    <p>{{property.date_listed}}</p>
-    <p>Posted by {{property.user.username}}</p> <!--Add link to creator profile-->
+    <div>
+        <h3>{{property.title}}</h3>
+        <p>{{property.description}}</p>
+        <p>{{property.location}}</p>
+        <p>{{property.price}} CAD per night</p>
+        <p>{{property.date_listed}}</p>
+    </div>
+    <p>Posted by {{property.user.username}} on {{property.date_listed}}.</p> <!--Add link to creator profile-->
     {% if property.user == request.user %}
-        <div class="card-action">
-            <a class="text-decoration-none" href="{% url 'property_update' property.id %}"><button class="btn btn-primary">Edit</button></a>
-            <a class="text-decoration-none" href="{% url 'property_delete' property.id %}"><button class="btn btn-danger">Delete</button></a>
-        </div>
+    <div class="card-action">
+        <a class="text-decoration-none" href="{% url 'property_update' property.id %}"><button class="btn btn-primary">Edit</button></a>
+        <a class="text-decoration-none" href="{% url 'property_delete' property.id %}"><button class="btn btn-danger">Delete</button></a>
+    </div>
+    {% endif %}
+    <div>
+        <h4>Listed Property Features:</h4>
+        <table>
+            {% for property_feature in property.property_features.all %}
+                <tr>
+                    <td>
+                        {{property_feature.get_feature_display}}
+
+                    </td>
+
+                    {% if property.user == request.user %}
+                        <td class="">
+                            <form action="{% url 'dissociate_property_feature' property.id property_feature.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-small btn-danger">X</button>
+                            </form>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% empty %}
+                <div>No features listed on this property</div>
+            {% endfor %}
+        </table>
+    </div>
+    {% if property.user == request.user %}
+    <div>
+        <h4>Add Features to Properties</h4>
+        <table>
+            {% for property_feature in features_property_doesnt_have.all %}
+                <tr>
+                    <td>
+                        {{property_feature.get_feature_display}}
+                    </td>
+                    <td class="">
+                        <form action="{% url 'associate_property_feature' property.id property_feature.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-small btn-success">Add</button>
+                        </form>
+                    </td>
+                </tr>
+            {% empty %}
+                <div>All available features are listed on this property</div>
+            {% endfor %}
+        </table>
+    </div>
     {% endif %}
 </div>
 {% endblock %}

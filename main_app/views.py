@@ -50,7 +50,7 @@ class ProfileView(DetailView):
 class ProfileUpdate(UpdateView):
   model = User
   template_name = 'user/updateuser.html'
-  fields = ['first_name', 'last_name', 'email']
+  fields = ['email']
   success_url = '/'
 
 class ProfileDelete(DeleteView):
@@ -66,11 +66,11 @@ class PropertyList(ListView):
 def property_detail(request, property_id):
   property = Property.objects.get(id=property_id)
   # Add review form
-  # Add property features not alredy on list
+  features_property_doesnt_have = PropertyFeature.objects.exclude(id__in = property.property_features.all().values_list('id'))
   return render(request, 'property/detail.html',{
     'property': property,
+    'features_property_doesnt_have': features_property_doesnt_have,
     # Pass review form
-    # Pass property features
   })
 
 class PropertyCreate(CreateView):
@@ -90,3 +90,12 @@ class PropertyDelete(DeleteView):
   model = Property
   template_name = 'property/confirm_delete.html'
   success_url = '/'
+
+def associate_property_feature(request, property_id, property_feature_id):
+  Property.objects.get(id=property_id).property_features.add(property_feature_id)
+  return redirect('property_detail', property_id=property_id)
+
+def dissociate_property_feature(request, property_id, property_feature_id):
+  Property.objects.get(id=property_id).property_features.remove(property_feature_id)
+  return redirect('property_detail', property_id=property_id)
+
