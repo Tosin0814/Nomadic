@@ -14,4 +14,13 @@ body {
   }
   
   
-  
+.property-img{
+  max-width: 400px;
+}
+
+.profile-img{
+  /* max-width: 200px; */
+  max-height: 200px;
+  border-radius: 50%;
+  /* border: solid 2px gray; */
+}

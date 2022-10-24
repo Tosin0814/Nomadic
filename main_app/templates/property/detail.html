@@ -5,13 +5,31 @@
 {% endblock %}
 
 {% block content %}
+<div class="card">
+    <div class="card-content">
+        {% for photo in property.photo_set.all %}
+            <img class="responsive-img property-img" src="{{photo.photo_url}}">
+        {% empty %}
+            <div class="card-panel teal-text center-align">No Photos Uploaded</div>
+        {% endfor %}
+    </div>
+    {% if property.user == request.user %}
+    <div class="card-action">
+        <form action="{% url 'add_photo' property.id %}" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            <input type="file" name="photo-file">
+            <br><br>
+            <input type="submit" class="btn btn-sm btn-outline-primary" value="Add Photo">
+        </form>
+    </div>
+    {% endif %}
+</div>
 <div>
     <div>
         <h3>{{property.title}}</h3>
         <p>{{property.description}}</p>
         <p>{{property.location}}</p>
         <p>{{property.price}} CAD per night</p>
-        <p>{{property.date_listed}}</p>
     </div>
     <p>Posted by {{property.user.username}} on {{property.date_listed}}.</p> <!--Add link to creator profile-->
     {% if property.user == request.user %}

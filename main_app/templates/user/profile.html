@@ -4,14 +4,36 @@
 {% endblock %}
 
 {% block content %}
-    <h2>{{user.username}}</h2>
-    <p>First Name: {{ user.first_name}}</p>
-    <p>Last Name: {{ user.last_name}}</p>
-    <p>Email: {{ user.email}}</p>
-    {% if user.id == request.user.id %}
+
+<div class="card">
+    <div class="card-content">
+        {% for photo in user.profilepicture_set.all %}
+            <img class="profile-img img-thumbnail" src="{{photo.url}}">
+        {% empty %}
+            <div class="card-panel center-align">No Photo</div>
+        {% endfor %}
+    </div>
+    {% if user == request.user %}
     <div class="card-action">
-        <a class="text-decoration-none" href="{% url 'profile_update' user.id %}"><button class="btn btn-primary">Edit</button></a>
-        <a class="text-decoration-none" href="{% url 'profile_delete' user.id %}"><button class="btn btn-danger">Delete</button></a>
+        <form action="{% url 'add_profile_photo' user.id %}" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            <input type="file" name="photo-file">
+            <br><br>
+            <input type="submit" class="btn btn-sm btn-outline-primary" value="Add Photo">
+        </form>
     </div>
     {% endif %}
+</div>
+<h2>{{user.username}}</h2>
+<p>First Name: {{ user.first_name}}</p>
+<p>Last Name: {{ user.last_name}}</p>
+<p>Email: {{ user.email}}</p>
+
+{% if user.id == request.user.id %}
+<div class="card-action">
+    <a class="text-decoration-none" href="{% url 'profile_update' user.id %}"><button class="btn btn-primary">Edit</button></a>
+    <a class="text-decoration-none" href="{% url 'profile_delete' user.id %}"><button class="btn btn-danger">Delete</button></a>
+</div>
+{% endif %}
+
 {% endblock %}

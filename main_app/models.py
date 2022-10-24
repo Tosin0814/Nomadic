@@ -33,7 +33,7 @@ class ProfilePicture(models.Model):
 
     def __str__(self):
         # For obtaining the friendly value of a Field.choice
-        return f"Photo created on {self.date_created}"
+        return f"Photo created for {self.user.username}"
 
 
 class PropertyFeature(models.Model):
@@ -76,7 +76,7 @@ class Photo(models.Model):
 
     def __str__(self):
         # For obtaining the friendly value of a Field.choice
-        return f"Photo created on {self.date_created}"
+        return f"Photo created for {self.property.title} on {self.date_created}"
 
     class Meta:
         ordering = ['date_created']

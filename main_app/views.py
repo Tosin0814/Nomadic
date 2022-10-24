@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import NewUserForm
 from django.views.generic import ListView, DeleteView, DetailView, UpdateView, CreateView
 from django.contrib import messages
-from .models import User, Property, PropertyFeature, Photo, Availability, Like, Review
+from .models import ProfilePicture, User, Property, PropertyFeature, Photo, Availability, Like, Review
 
 
 # Define the home view
@@ -43,6 +43,12 @@ class ProfilePage(DetailView):
 
 
 # New code here
+import uuid
+import boto3
+
+S3_BASE_URL = 'https://s3-ca-central-1.amazonaws.com/'
+BUCKET = 'nomadic-project'
+
 class ProfileView(DetailView):
   model = User
   template_name = 'user/profile.html'
@@ -99,3 +105,37 @@ def dissociate_property_feature(request, property_id, property_feature_id):
   Property.objects.get(id=property_id).property_features.remove(property_feature_id)
   return redirect('property_detail', property_id=property_id)
 
+def add_photo(request, property_id):
+    photo_file = request.FILES.get('photo-file', None)
+    if photo_file:
+        s3 = boto3.client('s3')
+        # need a unique "key" for S3 / needs image file extension too
+        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            # build the full url string
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            # we can assign to property_id or property (if you have a property object)
+            photo = Photo(photo_url=url, property_id=property_id)
+            photo.save()
+        except:
+            print('An error occurred uploading file to S3')
+    return redirect('property_detail', property_id=property_id)
+
+
+def add_profile_photo(request, user_id):
+    photo_file = request.FILES.get('photo-file', None)
+    if photo_file:
+        s3 = boto3.client('s3')
+        # need a unique "key" for S3 / needs image file extension too
+        key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+        try:
+            s3.upload_fileobj(photo_file, BUCKET, key)
+            # build the full url string
+            url = f"{S3_BASE_URL}{BUCKET}/{key}"
+            # we can assign to user_id or user (if you have a user object)
+            profile_picture = ProfilePicture(url=url, user_id=user_id)
+            profile_picture.save()
+        except:
+            print('An error occurred uploading file to S3')
+    return redirect('profile_view', pk=user_id)
