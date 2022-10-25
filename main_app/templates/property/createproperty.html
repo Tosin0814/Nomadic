@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title%}
+    {% if object %}
+        <h3>Edit Property</h3>
+    {% else %}
+        <h3>Add Property</h3>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    {% if object %}
+        <h1>Edit <span class="teal-text">{{object.title}}</span></h1>
+    {% else %}
+        <h1>Add Property</h1>
+    {% endif %}
+
+    <form method="post" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% if object %}
+    <input type="submit" class="btn btn-primary" value="Submit">
+    {% else %}
+    <input type="submit" class="btn btn-primary" value="Create Listing">
+    {% endif %}
+    
+    </form>
+
+{% endblock %}

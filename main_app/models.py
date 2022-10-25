@@ -33,7 +33,7 @@ class ProfilePicture(models.Model):
 
     def __str__(self):
         # For obtaining the friendly value of a Field.choice
-        return f"Photo created on {self.date_created}"
+        return f"Photo created for {self.user.username}"
 
 
 class PropertyFeature(models.Model):
@@ -52,14 +52,18 @@ class PropertyFeature(models.Model):
 class Property(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    description = models.CharField(max_length=800)
+    description = models.TextField(max_length=800)
     location = models.CharField(max_length=100)
     property_features = models.ManyToManyField(PropertyFeature)
+    price = models.FloatField()
     date_listed = models.DateField(auto_now_add=True)
 
     def __str__(self):
         # Nice method for obtaining the friendly value of a Field.choice
         return f"{self.title} on {self.date_listed}"
+
+    def get_absolute_url(self):
+        return reverse('property_detail', kwargs={'property_id': self.id})
 
     class Meta:
         ordering = ['-date_listed']
@@ -72,7 +76,7 @@ class Photo(models.Model):
 
     def __str__(self):
         # For obtaining the friendly value of a Field.choice
-        return f"Photo created on {self.date_created}"
+        return f"Photo created for {self.property.title} on {self.date_created}"
 
     class Meta:
         ordering = ['date_created']
