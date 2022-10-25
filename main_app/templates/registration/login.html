@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<li class="nav-item">Login</li>
+{% endblock %}
+
+{% block content %}
+
+<h1 class="p-3 m-3">Log In</h1>
+
+<form method="post" action="{% url 'login' %}" class="p-3 m-3">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" class="btn btn-primary" value="login">
+    <input type="hidden" name="next" value="{{ next }}">
+</form>
+{% endblock %}
