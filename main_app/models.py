@@ -93,6 +93,9 @@ class Availability(models.Model):
 
     class Meta:
         ordering = ['from_date']
+    
+    def get_absolute_url(self):
+        return reverse('property_detail', kwargs={'property_id': self.property.id})
 
 
 class Like(models.Model):

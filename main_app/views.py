@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from .forms import NewUserForm
+from .forms import NewUserForm, AvailabilityForm
 from django.views.generic import ListView, DeleteView, DetailView, UpdateView, CreateView
 from django.contrib import messages
 from .models import ProfilePicture, User, Property, PropertyFeature, Photo, Availability, Like, Review
@@ -73,9 +73,11 @@ def property_detail(request, property_id):
   property = Property.objects.get(id=property_id)
   # Add review form
   features_property_doesnt_have = PropertyFeature.objects.exclude(id__in = property.property_features.all().values_list('id'))
+  availability_form = AvailabilityForm()
   return render(request, 'property/detail.html',{
     'property': property,
     'features_property_doesnt_have': features_property_doesnt_have,
+    'availability_form' : availability_form,
     # Pass review form
   })
 
@@ -139,3 +141,22 @@ def add_profile_photo(request, user_id):
         except:
             print('An error occurred uploading file to S3')
     return redirect('profile_view', pk=user_id)
+
+# Add Availability
+
+def add_availability(request, property_id):
+  form = AvailabilityForm(request.POST)
+  if form.is_valid():
+    new_availbility = form.save(commit=False)
+    new_availbility.property_id = property_id
+    new_availbility.save()
+  return redirect('property_detail', property_id = property_id)
+
+def delete_availability(request, property_id, availability_id):
+  Property.objects.get(id = property_id).availability_set.filter(id = availability_id).delete()
+  return redirect('property_detail', property_id = property_id)
+
+class AvailabiblityUpdate(UpdateView):
+  model = Availability
+  form_class = AvailabilityForm
+  template_name = 'property/availability_form.html'
