@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from .forms import NewUserForm, AvailabilityForm
+from .forms import NewUserForm, AvailabilityForm, PropertyReviewForm
 from django.views.generic import ListView, DeleteView, DetailView, UpdateView, CreateView
 from django.contrib import messages
 from .models import ProfilePicture, User, Property, PropertyFeature, Photo, Availability, Like, Review
@@ -71,14 +71,14 @@ class PropertyList(ListView):
 
 def property_detail(request, property_id):
   property = Property.objects.get(id=property_id)
-  # Add review form
+  property_review_form = PropertyReviewForm
   features_property_doesnt_have = PropertyFeature.objects.exclude(id__in = property.property_features.all().values_list('id'))
   availability_form = AvailabilityForm()
   return render(request, 'property/detail.html',{
     'property': property,
     'features_property_doesnt_have': features_property_doesnt_have,
     'availability_form' : availability_form,
-    # Pass review form
+    'property_review_form' : property_review_form
   })
 
 class PropertyCreate(CreateView):
@@ -164,3 +164,15 @@ class AvailabiblityUpdate(UpdateView):
   model = Availability
   form_class = AvailabilityForm
   template_name = 'property/availability_form.html'
+
+
+# Add Property Review
+
+def review_property(request, property_id):
+    form = PropertyReviewForm(request.POST)
+    if form.is_valid():
+        new_review = form.save(commit=False)
+        new_review.user_name = request.user.username
+        new_review.property_id = property_id
+        new_review.save()
+    return redirect('property_detail', property_id = property_id)

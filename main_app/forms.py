@@ -4,11 +4,11 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 from django.forms import ModelForm
-from main_app.models import Availability
+from main_app.models import Availability, Review
 
 
 
-# Create your forms here.
+# Extend User
 
 class NewUserForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -32,3 +32,11 @@ class AvailabilityForm(ModelForm):
             "from_date" : forms.DateInput(attrs = {'id' : 'id_from_date' , 'type' : 'date'}),
             "till_date" : forms.DateInput(attrs = {'id' : 'id_till_date' , 'type' : 'date'}), 
         }
+
+
+# Add review form
+
+class PropertyReviewForm(ModelForm):
+    class Meta:
+        model = Review
+        fields = ['rating', 'review_text']
