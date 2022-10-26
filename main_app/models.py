@@ -6,16 +6,16 @@ from datetime import datetime, date
 from django.contrib.auth.models import User
 
 
-FEATURES = (
-    ('W', 'WIFI'),
-    ('TV', 'HDTV'),
-    ('WF', 'Waterfront'),
-    ('CAC', 'Central Air Conditioning'),
-    ('BS', 'Bluetooth Sound System'),
-    ('BG', 'Board Games'),
-    ('CH', 'Central heating'),
-    ('P', 'Pool'),
-)
+# FEATURES = (
+#     ('W', 'WIFI'),
+#     ('TV', 'HDTV'),
+#     ('WF', 'Waterfront'),
+#     ('CAC', 'Central Air Conditioning'),
+#     ('BS', 'Bluetooth Sound System'),
+#     ('BG', 'Board Games'),
+#     ('CH', 'Central heating'),
+#     ('P', 'Pool'),
+# )
 
 RATINGS = (
     ('E', 'Excellent'),
@@ -38,12 +38,11 @@ class ProfilePicture(models.Model):
 
 class PropertyFeature(models.Model):
     feature = models.CharField(
-        max_length=3,
-        choices = FEATURES,
+        max_length=30,
     )
     
     def __str__(self):
-        return f"{self.get_feature_display()}"
+        return f"{self.feature}"
     
     class Meta:
         ordering = ['feature']
