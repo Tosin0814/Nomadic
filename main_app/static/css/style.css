@@ -14,9 +14,9 @@ body {
   }
   
   
-.property-img{
-  max-width: 400px;
-}
+/* .property-img{
+  max-height: 200px;
+} */
 
 .profile-img{
   /* max-width: 200px; */
@@ -31,12 +31,27 @@ body {
   border: solid 2px gray;
 }
 
-.photo{
+/* .photo{
   position: relative;
-}
+  height: 300px;
+} */
 
-.delete-photo{
+/* .delete-photo{
   position: absolute;
   top: 0px;
   left: 0px;
+} */
+
+/* .photo-height{
+  height: 600px;
+} */
+
+.carousel-control-prev-icon, .carousel-control-next-icon {
+  height: 50px;
+  width: 50px;
+  /* outline: rgba(0, 0, 0, 0.4); */
+  background-color: rgba(0, 0, 0, 0.3);
+  /* background-size: 100%, 100%; */
+  /* border-radius: 50%; */
+  /* border: 1px solid black; */
 }
