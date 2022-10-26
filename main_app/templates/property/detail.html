@@ -39,7 +39,7 @@
         <p>{{property.location}}</p>
         <p>{{property.price|floatformat:2 }} CAD per night</p>
     </div>
-    <a class="text-decoration-none" href="{% url 'profile_view' property.id %}"><img class="small-profile-pic" src="{{property.user.profilepicture_set.first.url}}"> {{property.user.username}}</a>
+    <a class="text-decoration-none" href="{% url 'host_profile_view' property.id %}"><img class="small-profile-pic" src="{{property.user.profilepicture_set.first.url}}"> {{property.user.username}}</a>
     <p>Posted on {{property.date_listed}}.</p>
     {% if property.user == request.user %}
     <div class="card-action">
