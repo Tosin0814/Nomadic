@@ -22,6 +22,7 @@ urlpatterns = [
     path('property/<int:property_id>/associate_property_feature/<int:property_feature_id>/', views.associate_property_feature, name='associate_property_feature'),
     path('property/<int:property_id>/dissociate_property_feature/<int:property_feature_id>/', views.dissociate_property_feature, name='dissociate_property_feature'),
     path('property/<int:property_id>/add_photo/', views.add_photo, name='add_photo'),
+    path('property/<int:property_id>/delete_photo/', views.delete_photo_page, name='delete_photo_page'),
     path('property/<int:property_id>/delete_photo/<int:photo_id>/', views.delete_photo, name='delete_photo'),
 
     # Add Availability

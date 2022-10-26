@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title%}
+<h3>Property Photos</h3>
+{% endblock %}
+
+{% block content %}
+<div><h3>Delete Photos for {{property.title}}</h3></div>
+{% if property.photo_set.all %}
+<div class="container">
+    <div class="d-flex flex-row flex-wrap">
+        {% for photo in property.photo_set.all %}
+        <div class="photo">
+            <div class="card mb-5 mt-5">
+                <img class="" src="{{photo.photo_url}}" height="250">
+                {% if property.user == request.user %}
+                <form class="delete-photo" action="{% url 'delete_photo' property.id photo.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-sm btn-danger" value="x">
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div><h3>No Photos Uploaded</h3></div>
+{% endif %}
+
+{% endblock %}
