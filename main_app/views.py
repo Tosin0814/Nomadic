@@ -176,3 +176,8 @@ def review_property(request, property_id):
         new_review.property_id = property_id
         new_review.save()
     return redirect('property_detail', property_id = property_id)
+
+
+class HostProfileView(DetailView):
+  model = Property
+  template_name = 'property/host_profile.html'

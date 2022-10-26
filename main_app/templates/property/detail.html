@@ -31,7 +31,7 @@
         <p>{{property.location}}</p>
         <p>{{property.price}} CAD per night</p>
     </div>
-    <a class="text-decoration-none" href="">{{property.user.username}}</a>
+    <a class="text-decoration-none" href="{% url 'profile_view' property.id %}">{{property.user.username}}</a>
     <p>Posted on {{property.date_listed}}.</p> <!--Add link to creator profile-->
     {% if property.user == request.user %}
     <div class="card-action">
