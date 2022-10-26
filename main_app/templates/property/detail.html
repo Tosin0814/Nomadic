@@ -84,5 +84,34 @@
         </table>
     </div>
     {% endif %}
+
+    <!-- Availabilit -->
+     <div style="margin-top:80px">
+        <h4>Add Availability to Properties</h4>
+        {% for availability in property.availability_set.all %}
+        <div>
+            <br>
+            Booking Date:
+            <br>
+            {{availability.from_date}}
+            <br>
+            {{availability.till_date}}
+            <form action="{% url 'delete_availability' property.id availability.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Delete an Available">
+            </form>
+            <a href="{% url 'update_availability' availability.id %}">Update an Available</a>
+        {% endfor %}
+        </div>
+        <div>
+            <form action="{% url 'add_availability' property.id %}" method="post">
+                {% csrf_token %}
+                {{availability_form.as_table}}
+                <input type="submit" class="btn-primary" value="Add Avaibility">
+            </form>
+        </div>
+    </div>
+    
+
 </div>
 {% endblock %}

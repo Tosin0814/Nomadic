@@ -21,4 +21,9 @@ urlpatterns = [
     path('<int:property_id>/dissociate_property_feature/<int:property_feature_id>/', views.dissociate_property_feature, name='dissociate_property_feature'),
     path('<int:property_id>/add_photo/', views.add_photo, name='add_photo'),
     path('profile/<int:user_id>/add_profile_photo/', views.add_profile_photo, name='add_profile_photo'),
+
+    # Add Availability
+    path('<int:property_id>/add_availability/', views.add_availability, name="add_availability"),
+    path('<int:property_id>/delete_availability/<int:availability_id>/', views.delete_availability, name='delete_availability'),
+    path('property/<int:pk>/update/', views.AvailabiblityUpdate.as_view(), name="update_availability"),
 ]
