@@ -44,7 +44,7 @@
             {% for property_feature in property.property_features.all %}
                 <tr>
                     <td>
-                        {{property_feature.get_feature_display}}
+                        {{property_feature.feature}}
 
                     </td>
 
@@ -69,7 +69,7 @@
             {% for property_feature in features_property_doesnt_have.all %}
                 <tr>
                     <td>
-                        {{property_feature.get_feature_display}}
+                        {{property_feature.feature}}
                     </td>
                     <td class="">
                         <form action="{% url 'associate_property_feature' property.id property_feature.id %}" method="post">
