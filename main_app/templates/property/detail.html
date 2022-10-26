@@ -123,7 +123,7 @@
                     {% csrf_token %}
                     <input type="submit" value="Delete an Available">
                 </form>
-                <a href="{% url 'update_availability' availability.id %}">Update an Available</a>
+                <a href="{% url 'update_availability' property.id availability.id %}">Update an Available</a>
             {% endfor %}
 
             </div>
@@ -134,10 +134,8 @@
                     <input type="submit" class="btn-primary" value="Add Avaibility">
                 </form>
             </div>
-
         </table>
     </div>
-    {% endif %}
 
     <!-- Availability -->
      <div style="margin-top:80px">
