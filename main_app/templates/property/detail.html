@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block title%}
+<h3>Property Details</h3>
+{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="m-4"><h3>{{property.title}}</h3></div>
+    {% if property.photo_set.all %}
+    <div id="carousel" class="card carousel slide w-100 mx-auto bg-light" data-ride="carousel">
+        <div class="carousel-inner mx-auto">
+            {% for photo in property.photo_set.all %}
+            {% with forloop.counter0 as i %}
+                <div class="carousel-item {% if i is 0 %}active{% endif %}">
+                    <img class="d-block mx-auto" src="{{photo.photo_url}}" height="600">
+                </div>
+            {% endwith %}
+            {% endfor %}
+        </div>
+        <a class="carousel-control-prev" href="#" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon text-dark" aria-hidden="true"></span>
+        </a>
+        <a class="carousel-control-next" href="#" role="button" data-slide="next">
+            <span class="carousel-control-next-icon text-dark" aria-hidden="true"></span>
+        </a>
+    </div>
+    {% else %}
+    <div><h4>No Photos Uploaded</h4></div>
+    {% endif %}
+    {% if property.user == request.user %}
+    <div class="col p-3">
+        <div class="mt-3">
+            <form action="{% url 'add_photo' property.id %}" enctype="multipart/form-data" method="POST">
+                {% csrf_token %}
+                <input type="file" name="photo-file">
+                <br><br>
+                <input type="submit" class="btn btn-sm btn-outline-primary" value="Add Photo">
+            </form>
+        </div>
+        <div class="mt-2 pt-1">
+            <a class="text-decoration-none" href="{% url 'delete_photo_page' property.id %}"><button class="btn btn-sm btn-secondary">Edit Photos</button></a>
+        </div>
+    </div>
+    <br>
+    <br>
+    {% endif %}
+    <div class="p-3">
+        <div>
+            <div><h5> Description: </h5><p>{{property.description}}</p></div>
+            <br>
+            <p><strong>Location: </strong>{{property.location}}</p>
+            <p><strong>Price: </strong>{{property.price|floatformat:2}} CAD per night</p>
+        </div>
+        <a class="text-decoration-none" href="{% url 'host_profile_view' property.id %}"><img class="small-profile-pic" src="{{property.user.profilepicture_set.first.url}}"> {{property.user.username}}</a>
+        <p>Posted on {{property.date_listed}}.</p>
+        {% if property.user == request.user %}
+        <div class="card-action">
+            <a class="text-decoration-none" href="{% url 'property_update' property.id %}"><button class="btn btn-primary">Edit Property</button></a>
+            <a class="text-decoration-none" href="{% url 'property_delete' property.id %}"><button class="btn btn-danger">Delete Property</button></a>
+        </div>
+        <br><br>
+        {% endif %}
+        <div>
+            <h4>Listed Property Features:</h4>
+            <table>
+                {% for property_feature in property.property_features.all %}
+                    <tr>
+                        <td>
+                            {{property_feature.feature}}
+    
+                        </td>
+    
+                        {% if property.user == request.user %}
+                            <td class="">
+                                <form action="{% url 'dissociate_property_feature' property.id property_feature.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-small btn-danger">X</button>
+                                </form>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% empty %}
+                    <div>No features listed on this property</div>
+                {% endfor %}
+            </table>
+        </div>
+        {% if property.user == request.user %}
+        <div>
+            <h4>Add Features to Properties</h4>
+            <table>
+                {% for property_feature in features_property_doesnt_have.all %}
+                    <tr>
+                        <td>
+                            {{property_feature.feature}}
+                        </td>
+                        <td class="">
+                            <form action="{% url 'associate_property_feature' property.id property_feature.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-small btn-success">Add</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <div>All available features are listed on this property</div>
+                {% endfor %}
+            </table>
+        </div>
+        {% endif %}
+    
+        <!-- Availability -->
+         <div style="margin-top:80px">
+            <h4>Availability to Properties</h4>
+            {% for availability in property.availability_set.all %}
+            <div>
+                <br>
+                Booking Date:
+                <br>
+                {{availability.from_date}}
+                <br>
+                {{availability.till_date}}
+                <form action="{% url 'delete_availability' property.id availability.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="Delete an Available">
+                </form>
+                <a href="{% url 'update_availability' property.id availability.id %}">Update an Available</a>
+            {% endfor %}
+
+            </div>
+            <div>
+                <form action="{% url 'add_availability' property.id %}" method="post">
+                    {% csrf_token %}
+                    {{availability_form.as_table}}
+                    <input type="submit" class="btn-primary" value="Add Avaibility">
+                </form>
+            </div>
+        </table>
+    </div>
+
+    <!-- Availability -->
+     <div style="margin-top:80px">
+        <h4>Availability to Properties</h4>
+        {% for availability in property.availability_set.all %}
+        <div>
+            <br>
+            Booking Date:
+            <br>
+            {{availability.from_date}}
+            <br>
+            {{availability.till_date}}
+            <form action="{% url 'delete_availability' property.id availability.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Delete an Available">
+            </form>
+            <a href="{% url 'update_availability' property.id availability.id %}">Update an Available</a>
+        {% endfor %}
+
+        </div>
+    
+        <!-- Property Review Form -->
+        <div class="col-8 card pt-3">
+            <h4 class="text-center">Review Property</h4>
+            <form id="add-review-form" class="row g-1" action="{% url 'review_property' property.id %}" method="post">
+                {% csrf_token %}
+                {{ property_review_form.as_p }}
+                <input type="submit" class="btn btn-primary add-review-btn" value="Add Review">
+            </form>
+            <p class="review-output-message"></p>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="card col customer-reviews p-5">
+            <h4 class="text-center">Customer Reviews</h4>
+            <br>
+            {% for review in property.review_set.all %}
+                <div class="border border-secondary p-2 mb-2 review">
+                    <h6 class="bottom-border border-secondary">{{review.user_name}}</h6>
+                    <hr>
+                    <p><strong>Rating: </strong>{{review.get_rating_display}}</p>
+                    <div><strong>Review: </strong><p>{{review.review_text}}</p></div>
+                    <p><small>Posted on {{review.date}}</small></p>
+                </div>
+                <br>
+            {% empty %}
+                <div class="card-panel teal-text center-align">No Reviews</div>
+            {% endfor %}
+        </div>
+    
+    </div>
+</div>
+
+
+<script>
+$(document).ready(function(){
+    // Activate Carousel
+    $("#carousel").carousel();
+
+    $(".carousel-control-prev").click(function(){
+    $("#carousel").carousel("prev");
+    });
+
+    $(".carousel-control-next").click(function(){
+    $("#carousel").carousel("next");
+  });
+});
+</script>
+{% endblock %}

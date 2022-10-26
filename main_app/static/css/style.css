@@ -14,4 +14,42 @@ body {
   }
   
   
-  
+.main-content{
+  width: 75%;
+  margin: 0 auto;
+}
+
+.profile-img{
+  /* max-width: 200px; */
+  max-height: 200px;
+  border-radius: 50%;
+  /* border: solid 2px gray; */
+}
+
+.small-profile-pic{
+  max-height: 25px;
+  border-radius: 50%;
+  border: solid 2px gray;
+}
+
+.photo{
+  position: relative;
+  margin-left: 25px;
+}
+
+.delete-photo{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+
+.carousel-control-prev-icon, .carousel-control-next-icon {
+  height: 50px;
+  width: 50px;
+  /* outline: rgba(0, 0, 0, 0.4); */
+  background-color: rgba(0, 0, 0, 0.3);
+  /* background-size: 100%, 100%; */
+  /* border-radius: 50%; */
+  /* border: 1px solid black; */
+}
