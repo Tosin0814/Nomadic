@@ -30,3 +30,13 @@ body {
   border-radius: 50%;
   border: solid 2px gray;
 }
+
+.photo{
+  position: relative;
+}
+
+.delete-photo{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
