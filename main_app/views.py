@@ -124,6 +124,9 @@ def add_photo(request, property_id):
             print('An error occurred uploading file to S3')
     return redirect('property_detail', property_id=property_id)
 
+def delete_photo(request, property_id, photo_id):
+  Property.objects.get(id = property_id).photo_set.filter(id = photo_id).delete()
+  return redirect('property_detail', property_id = property_id)
 
 def add_profile_photo(request, user_id):
     photo_file = request.FILES.get('photo-file', None)

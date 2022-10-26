@@ -20,6 +20,7 @@ urlpatterns = [
     path('<int:property_id>/associate_property_feature/<int:property_feature_id>/', views.associate_property_feature, name='associate_property_feature'),
     path('<int:property_id>/dissociate_property_feature/<int:property_feature_id>/', views.dissociate_property_feature, name='dissociate_property_feature'),
     path('<int:property_id>/add_photo/', views.add_photo, name='add_photo'),
+    path('<int:property_id>/delete_photo/<int:photo_id>/', views.delete_photo, name='delete_photo'),
     path('profile/<int:user_id>/add_profile_photo/', views.add_profile_photo, name='add_profile_photo'),
 
     # Add Availability
