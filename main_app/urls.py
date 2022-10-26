@@ -26,4 +26,7 @@ urlpatterns = [
     path('<int:property_id>/add_availability/', views.add_availability, name="add_availability"),
     path('<int:property_id>/delete_availability/<int:availability_id>/', views.delete_availability, name='delete_availability'),
     path('property/<int:pk>/update/', views.AvailabiblityUpdate.as_view(), name="update_availability"),
+
+    # Add Property Review
+    path('property/<int:property_id>/review_property/', views.review_property, name='review_property'),
 ]

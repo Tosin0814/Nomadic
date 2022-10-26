@@ -103,6 +103,7 @@ class Like(models.Model):
 
 
 class Review(models.Model):
+    user_name = models.CharField(max_length=100)
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
     rating = models.CharField(
         max_length=2,
@@ -113,4 +114,4 @@ class Review(models.Model):
 
     def __str__(self):
         # Nice method for obtaining the friendly value of a Field.choice
-        return f"{self.get_rating_display()} on {self.date}"
+        return f"By {self.user_name} on {self.date}"
