@@ -14,9 +14,10 @@ body {
   }
   
   
-/* .property-img{
-  max-height: 200px;
-} */
+.main-content{
+  width: 75%;
+  margin: 0 auto;
+}
 
 .profile-img{
   /* max-width: 200px; */
@@ -31,20 +32,17 @@ body {
   border: solid 2px gray;
 }
 
-/* .photo{
+.photo{
   position: relative;
-  height: 300px;
-} */
+  margin-left: 25px;
+}
 
-/* .delete-photo{
+.delete-photo{
   position: absolute;
   top: 0px;
-  left: 0px;
-} */
+  right: 0px;
+}
 
-/* .photo-height{
-  height: 600px;
-} */
 
 .carousel-control-prev-icon, .carousel-control-next-icon {
   height: 50px;
