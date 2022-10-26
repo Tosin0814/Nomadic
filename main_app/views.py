@@ -128,6 +128,10 @@ def add_photo(request, property_id):
 def add_profile_photo(request, user_id):
     photo_file = request.FILES.get('photo-file', None)
     if photo_file:
+        # First delete previous photo (Only one photo is allowed)
+        existing_photos = ProfilePicture.objects.filter(user_id=user_id)
+        if existing_photos:
+            existing_photos.delete()
         s3 = boto3.client('s3')
         # need a unique "key" for S3 / needs image file extension too
         key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
