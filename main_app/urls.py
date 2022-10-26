@@ -29,4 +29,7 @@ urlpatterns = [
 
     # Add Property Review
     path('property/<int:property_id>/review_property/', views.review_property, name='review_property'),
+
+    # Host Profile
+    path('property/<int:pk>/host_profile/', views.HostProfileView.as_view(), name='profile_view'),
 ]

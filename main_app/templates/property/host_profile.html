@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title%}
+    <h3>{{property.user.username}}'s Profile</h3>
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <div class="card-content">
+        {% for photo in property.user.profilepicture_set.all %}
+            <img class="profile-img img-thumbnail" src="{{photo.url}}">
+        {% empty %}
+            <div class="card-panel center-align">No Photo</div>
+        {% endfor %}
+    </div>
+</div>
+<h2>{{property.user.username}}</h2>
+<p>First Name: {{ property.user.first_name}}</p>
+<p>Last Name: {{ property.user.last_name}}</p>
+<p>Email: {{ property.user.email}}</p>
+
+
+{% endblock %}
