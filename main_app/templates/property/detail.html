@@ -113,12 +113,12 @@
         <form action="{% url 'add_like' property.id %}" method="post" style="margin-top:50px">
             {% csrf_token %}
             {{like_form.as_p}}
-            <input type="submit" value="Add to Likes">
+            <button type="submit" class="btn btn-small btn-success" >Add to Likes</button>
         </form>
         <form action="{% url 'add_dislike' property.id %}" method="post">
             {% csrf_token %}
             {{like_form.as_p}}
-            <input type="submit" value="Dislike to Likes">
+            <button type="submit" class="btn btn-small btn-danger">Dislike to Likes</button>
         </form>
     
         <!-- Availability -->
