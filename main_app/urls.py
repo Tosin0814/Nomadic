@@ -38,4 +38,5 @@ urlpatterns = [
 
     path('likes/', views.like_index, name="like"),
     path('property/<int:property_id>/add_like', views.add_like,name="add_like"),
+    path('property/<int:property_id>/add_dislike', views.add_dislike, name="add_dislike")
 ]
