@@ -201,7 +201,8 @@ def like_index(request):
   })
 
 def add_like(request,property_id):
-  if not Property.objects.filter(id = property_id).exists():
-    new_like = Like(property = Property.objects.get(id = property_id))
-    new_like.save()
+  add_property = Property.objects.get(id = property_id)
+  if not Like.objects.filter(property = add_property).exists():
+      new_like = Like(property = add_property)
+      new_like.save()
   return redirect('property_detail', property_id = property_id)
