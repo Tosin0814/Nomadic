@@ -9,22 +9,29 @@
 {% endblock %}
 
 {% block content %}
+<div class="p-5 border-light container justify-content-center">
+    <div class=" w-50 card row justify-content-center mx-auto">
+        <div class="col bg-light">
+            {% if object %}
+            <h3 class="text-center mt-2">Edit <span class="">{{object.title}}</span></h3>
+            {% else %}
+            <h3 class="text-center mt-2">Add Property</h3>
+            {% endif %}
+            <br>
+            <form method="post" action="">
+                {% csrf_token %}
+                {{ form.as_p }}
+                {% if object %}
+                <input type="submit" class="btn btn-primary" value="Submit">
+                {% else %}
+                <input type="submit" class="btn btn-primary" value="Create Listing">
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
 
-    {% if object %}
-        <h1>Edit <span class="teal-text">{{object.title}}</span></h1>
-    {% else %}
-        <h1>Add Property</h1>
-    {% endif %}
 
-    <form method="post" action="">
-    {% csrf_token %}
-    {{ form.as_p }}
-    {% if object %}
-    <input type="submit" class="btn btn-primary" value="Submit">
-    {% else %}
-    <input type="submit" class="btn btn-primary" value="Create Listing">
-    {% endif %}
     
-    </form>
 
 {% endblock %}

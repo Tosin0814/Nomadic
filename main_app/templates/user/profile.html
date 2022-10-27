@@ -1,39 +1,111 @@
 {% extends 'base.html' %}
 {% block title%}
-    <h3>{{user.username}}'s Profile</h3>
+    <h3>{{user.first_name}}'s Profile</h3>
 {% endblock %}
 
 {% block content %}
 
-<div class="card">
-    <div class="card-content">
-        {% for photo in user.profilepicture_set.all %}
-            <img class="profile-img img-thumbnail" src="{{photo.url}}">
-        {% empty %}
-            <div class="card-panel center-align">No Photo</div>
-        {% endfor %}
+<div class="main-content mt-5">
+    <div class="row">
+        <div class="col-3 p-2">
+            <div class="">
+                {% for photo in user.profilepicture_set.all %}
+                    <img class="profile-img img-thumbnail" src="{{photo.url}}">
+                {% empty %}
+                    <div class="card-panel center-align">No Photo</div>
+                {% endfor %}
+            </div>
+            {% if user == request.user %}
+            <br>
+            <div class="">
+                <form action="{% url 'add_profile_photo' user.id %}" enctype="multipart/form-data" method="POST">
+                    {% csrf_token %}
+                    <input type="file" name="photo-file">
+                    <br><br>
+                    <input type="submit" class="btn btn-sm btn-outline-primary" value="Update Photo">
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col p-3">
+            <h3>User Information</h3>
+            <p><strong>Username: </strong>{{user.username}}</p>
+            <p><strong>First Name: </strong>{{ user.first_name}}</p>
+            <p><strong>Last Name: </strong>{{ user.last_name}}</p>
+            <p><strong>Email: </strong>{{ user.email}}</p>
+            
+            {% if user.id == request.user.id %}
+            <div class="">
+                <a class="text-decoration-none" href="{% url 'profile_update' user.id %}"><button class="btn btn-primary">Edit</button></a>
+                <a class="text-decoration-none" href="{% url 'profile_delete' user.id %}"><button class="btn btn-danger">Delete</button></a>
+            </div>
+            {% endif %}
+        </div>
     </div>
-    {% if user == request.user %}
-    <div class="card-action">
-        <form action="{% url 'add_profile_photo' user.id %}" enctype="multipart/form-data" method="POST">
-            {% csrf_token %}
-            <input type="file" name="photo-file">
-            <br><br>
-            <input type="submit" class="btn btn-sm btn-outline-primary" value="Add Photo">
-        </form>
-    </div>
-    {% endif %}
-</div>
-<h2>{{user.username}}</h2>
-<p>First Name: {{ user.first_name}}</p>
-<p>Last Name: {{ user.last_name}}</p>
-<p>Email: {{ user.email}}</p>
+    <div class="d-flex flex-row flex-wrap justify-content-between">
+        <div class="card border-light m-1 p-0 scroll" style="width: 45%;">
+            <div class="p-2 bg-light w-100">
+                <h3 class="text-center">Posted Properties</h3>
+            </div>
+            <div class="p-3 mx-auto">
+                {% for property in user.property_set.all%}
+                <a class="text-decoration-none text-center" href="{% url 'property_detail' property.id %}">
+                    <div class="card flex-container profile-property-card" >
+                        {% if property.photo_set.first %}
+                        <div class="text-center">
+                            <img class="profile-property-photo" src="{{property.photo_set.first.photo_url}}" alt="No image">
+                        </div>
+                        {% else %}
+                        <div class="text-center text-dark">
+                            <p>No Image</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="">
+                        <p class="text-center text-dark"><strong>{{property.title}}</strong></p>
+                        <p class="text-center text-dark">{{property.location}}</p>
+                        <p class="text-center text-dark">{{property.price|floatformat:2}} CAD per night</p>
+                    </div>
+                </a>
+                <br>
+                {% empty %}
+                <p>No Properties posted</p>
+                {% endfor %}
+            </div>
 
-{% if user.id == request.user.id %}
-<div class="card-action">
-    <a class="text-decoration-none" href="{% url 'profile_update' user.id %}"><button class="btn btn-primary">Edit</button></a>
-    <a class="text-decoration-none" href="{% url 'profile_delete' user.id %}"><button class="btn btn-danger">Delete</button></a>
+        </div>
+        <div class="card border-light m-1 p-0 scroll" style="width: 45%;">
+            <div class="p-2 bg-light w-100">
+                <h3 class="text-center">Liked Properties</h3>
+            </div>
+            <div class="p-3 mx-auto">
+                {% for like in user.like_set.all%}
+                <a class="text-decoration-none text-center" href="{% url 'property_detail' property.id %}">
+                    <div class="card flex-container profile-property-card" >
+                        {% if like.property.photo_set.first %}
+                        <div class="text-center">
+                            <img class="profile-property-photo" src="{{property.photo_set.first.photo_url}}" alt="No image">
+                        </div>
+                        {% else %}
+                        <div class="text-center text-dark">
+                            <p>No Image</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="">
+                        <p class="text-center text-dark"><strong>{{like.property.title}}</strong></p>
+                        <p class="text-center text-dark">{{like.property.location}}</p>
+                        <p class="text-center text-dark">{{like.property.price|floatformat:2}} CAD per night</p>
+                    </div>
+                </a>
+                <br>
+                {% empty %}
+                <p>No Properties Liked</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <br>
 </div>
-{% endif %}
 
 {% endblock %}

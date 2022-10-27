@@ -53,7 +53,7 @@
             <p><strong>Price: </strong>{{property.price|floatformat:2}} CAD per night</p>
         </div>
         <a class="text-decoration-none" href="{% url 'host_profile_view' property.id %}"><img class="small-profile-pic" src="{{property.user.profilepicture_set.first.url}}"> {{property.user.username}}</a>
-        <p>Posted on {{property.date_listed}}.</p>
+        <span>posted on {{property.date_listed}}.</span>
         {% if property.user == request.user %}
         <div class="card-action">
             <a class="text-decoration-none" href="{% url 'property_update' property.id %}"><button class="btn btn-primary">Edit Property</button></a>
@@ -107,38 +107,10 @@
             </table>
         </div>
         {% endif %}
-    
-        <!-- Availability -->
-         <div style="margin-top:80px">
-            <h4>Availability to Properties</h4>
-            {% for availability in property.availability_set.all %}
-            <div>
-                <br>
-                Booking Date:
-                <br>
-                {{availability.from_date}}
-                <br>
-                {{availability.till_date}}
-                <form action="{% url 'delete_availability' property.id availability.id %}" method="POST">
-                    {% csrf_token %}
-                    <input type="submit" value="Delete an Available">
-                </form>
-                <a href="{% url 'update_availability' property.id availability.id %}">Update an Available</a>
-            {% endfor %}
-
-            </div>
-            <div>
-                <form action="{% url 'add_availability' property.id %}" method="post">
-                    {% csrf_token %}
-                    {{availability_form.as_table}}
-                    <input type="submit" class="btn-primary" value="Add Avaibility">
-                </form>
-            </div>
-        </table>
     </div>
 
     <!-- Availability -->
-     <div style="margin-top:80px">
+    <div class="p3">
         <h4>Availability to Properties</h4>
         {% for availability in property.availability_set.all %}
         <div>
@@ -156,38 +128,65 @@
         {% endfor %}
 
         </div>
-    
-        <!-- Property Review Form -->
-        <div class="col-8 card pt-3">
-            <h4 class="text-center">Review Property</h4>
-            <form id="add-review-form" class="row g-1" action="{% url 'review_property' property.id %}" method="post">
+        <div>
+            <form action="{% url 'add_availability' property.id %}" method="post">
                 {% csrf_token %}
-                {{ property_review_form.as_p }}
-                <input type="submit" class="btn btn-primary add-review-btn" value="Add Review">
+                {{availability_form.as_table}}
+                <input type="submit" class="btn-primary" value="Add Avaibility">
             </form>
-            <p class="review-output-message"></p>
         </div>
-        <br>
-        <br>
-        <br>
-        <br>
-        <div class="card col customer-reviews p-5">
-            <h4 class="text-center">Customer Reviews</h4>
-            <br>
-            {% for review in property.review_set.all %}
-                <div class="border border-secondary p-2 mb-2 review">
-                    <h6 class="bottom-border border-secondary">{{review.user_name}}</h6>
-                    <hr>
-                    <p><strong>Rating: </strong>{{review.get_rating_display}}</p>
-                    <div><strong>Review: </strong><p>{{review.review_text}}</p></div>
-                    <p><small>Posted on {{review.date}}</small></p>
-                </div>
-                <br>
-            {% empty %}
-                <div class="card-panel teal-text center-align">No Reviews</div>
-            {% endfor %}
-        </div>
+    </div>
+
+    <!-- add_like -->
+    <div class="p3">
+        <form action="{% url 'add_like' property.id %}" method="post">
+            {% csrf_token %}
+            {{like_form.as_p}}
+            <button type="submit" class="btn btn-small btn-success" >Add to Likes</button>
+        </form>
+        <form action="{% url 'add_dislike' property.id %}" method="post">
+            {% csrf_token %}
+            {{like_form.as_p}}
+            <button type="submit" class="btn btn-small btn-danger">Dislike to Likes</button>
+        </form>
+    </div>
+    <br>
+    <br>
     
+    <!-- Property Review Form -->
+    <div class="p-5 border-light container justify-content-center">
+        <div class=" w-70 card row justify-content-center mx-auto">
+            <div class="col bg-light">
+                <h3 class="text-center mt-2">Review Property</h3>
+                <br>
+                <div class="p-3 text-center">
+                    <form id="add-review-form" class="row g-1" action="{% url 'review_property' property.id %}" method="post">
+                        {% csrf_token %}
+                        {{ property_review_form.as_p }}
+                        <input type="submit" class="btn btn-primary add-review-btn" value="Add Review">
+                    </form>
+                    <p class="review-output-message"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="card col customer-reviews p-5">
+        <h3 class="text-center">Customer Reviews</h3>
+        <br>
+        {% for review in property.review_set.all %}
+            <div class="border border-secondary p-2 mb-2 review">
+                <h6 class="bottom-border border-secondary">{{review.user_name}}</h6>
+                <hr>
+                <p><strong>Rating: </strong>{{review.get_rating_display}}</p>
+                <div><strong>Review: </strong><p>{{review.review_text}}</p></div>
+                <p><small>Posted on {{review.date}}</small></p>
+            </div>
+            <br>
+        {% empty %}
+            <div class="card-panel teal-text center-align">No Reviews</div>
+        {% endfor %}
     </div>
 </div>
 

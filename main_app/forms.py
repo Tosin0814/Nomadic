@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 from django.forms import ModelForm
-from main_app.models import Availability, Review
+from main_app.models import Availability, Review,Like
 
 
 
@@ -14,6 +14,12 @@ class NewUserForm(UserCreationForm):
     email = forms.EmailField(required=True)
     first_name = forms.CharField(max_length=50, required=True)
     last_name = forms.CharField(max_length=50, required=True)
+    
+    def __init__(self, *args, **kwargs):
+        super(NewUserForm, self).__init__(*args, **kwargs)
+
+        for fieldname in ['username', 'password1', 'password2']:
+            self.fields[fieldname].help_text = None
 
     class Meta:
         model = User
@@ -40,3 +46,8 @@ class PropertyReviewForm(ModelForm):
     class Meta:
         model = Review
         fields = ['rating', 'review_text']
+
+class LikeForm(ModelForm):
+    class Meta:
+        model = Like
+        fields = ["property"]
