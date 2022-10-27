@@ -5,19 +5,60 @@
 
 {% block content %}
 
-<div class="card">
-    <div class="card-content">
-        {% for photo in property.user.profilepicture_set.all %}
-            <img class="profile-img img-thumbnail" src="{{photo.url}}">
-        {% empty %}
-            <div class="card-panel center-align">No Photo</div>
-        {% endfor %}
+<div class="main-content mt-5">
+    <div class="row">
+        <div class="col-3 p-2">
+            <div class="">
+                {% for photo in property.user.profilepicture_set.all %}
+                    <img class="profile-img img-thumbnail" src="{{photo.url}}">
+                {% empty %}
+                    <div class="card-panel center-align">No Photo</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col p-3">
+            <h3>User Information</h3>
+            <p><strong>Username: </strong>{{property.user.username}}</p>
+            <p><strong>First Name: </strong>{{property.user.first_name}}</p>
+            <p><strong>Last Name: </strong>{{property.user.last_name}}</p>
+            <p><strong>Email: </strong>{{property.user.email}}</p>
+        </div>
     </div>
+    <div class="d-flex flex-row flex-wrap justify-content-between">
+        <div class="card border-light m-1 p-0 scroll" style="width: 100%;">
+            <div class="p-2 bg-light w-100">
+                <h3 class="text-center">Posted Properties</h3>
+            </div>
+            <div class="p-3 mx-auto">
+                {% for property in property.user.property_set.all%}
+                <a class="text-decoration-none text-center" href="{% url 'property_detail' property.id %}">
+                    <div class="card flex-container profile-property-card" >
+                        {% if property.photo_set.first %}
+                        <div class="text-center">
+                            <img class="profile-property-photo" src="{{property.photo_set.first.photo_url}}" alt="No image">
+                        </div>
+                        {% else %}
+                        <div class="text-center text-dark">
+                            <p>No Image</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="">
+                        <p class="text-center text-dark"><strong>{{property.title}}</strong></p>
+                        <p class="text-center text-dark">{{property.location}}</p>
+                        <p class="text-center text-dark">{{property.price|floatformat:2}} CAD per night</p>
+                    </div>
+                </a>
+                <br>
+                {% empty %}
+                <p>No Properties posted</p>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+    <br>
 </div>
-<h2>{{property.user.username}}</h2>
-<p>First Name: {{ property.user.first_name}}</p>
-<p>Last Name: {{ property.user.last_name}}</p>
-<p>Email: {{ property.user.email}}</p>
 
 
 {% endblock %}

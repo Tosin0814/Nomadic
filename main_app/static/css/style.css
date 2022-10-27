@@ -76,6 +76,10 @@ body {
   max-height: 200px;
   max-width: 300px;
 }
+.profile-property-div{
+  height: 350px;
+  width: 300px;
+}
 
 .carousel-control-prev-icon, .carousel-control-next-icon {
   height: 50px;
