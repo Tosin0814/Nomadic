@@ -1,7 +1,8 @@
+from unittest import skip
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from .forms import NewUserForm, AvailabilityForm, PropertyReviewForm
+from .forms import NewUserForm, AvailabilityForm, PropertyReviewForm,LikeForm
 from django.views.generic import ListView, DeleteView, DetailView, UpdateView, CreateView
 from django.contrib import messages
 from .models import ProfilePicture, User, Property, PropertyFeature, Photo, Availability, Like, Review
@@ -78,7 +79,7 @@ def property_detail(request, property_id):
     'property': property,
     'features_property_doesnt_have': features_property_doesnt_have,
     'availability_form' : availability_form,
-    'property_review_form' : property_review_form
+    'property_review_form' : property_review_form,
   })
 
 class PropertyCreate(CreateView):
@@ -192,3 +193,22 @@ def review_property(request, property_id):
 class HostProfileView(DetailView):
   model = Property
   template_name = 'property/host_profile.html'
+
+def like_index(request):
+  likes = Like.objects.all()
+  return render(request, 'user/like.html',{
+    "likes" : likes
+  })
+
+def add_like(request,property_id):
+  add_property = Property.objects.get(id = property_id)
+  if not Like.objects.filter(property = add_property).exists():
+      new_like = Like(property = add_property)
+      new_like.save()
+  return redirect('property_detail', property_id = property_id)
+
+def add_dislike(request,property_id):
+  add_property = Property.objects.get(id = property_id)
+  if Like.objects.filter(property = add_property).exists():
+     Like.objects.filter(property = add_property).delete()
+  return redirect('like')
