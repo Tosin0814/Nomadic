@@ -37,12 +37,34 @@ body {
   margin-left: 25px;
 }
 
+.text-center {
+  text-align: center;
+  margin-bottom: 0px;
+}
+
+.flex-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .delete-photo{
   position: absolute;
   top: 0px;
   right: 0px;
 }
 
+.index-photo-card{
+  background-color: rgba(169,169,169, 0.1);
+  height: 280px;
+  width: 350px;
+}
+
+.index-photo{
+  max-height: 280px;
+  max-width: 350px;
+}
 
 .carousel-control-prev-icon, .carousel-control-next-icon {
   height: 50px;
