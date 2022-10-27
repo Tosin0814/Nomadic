@@ -53,7 +53,7 @@
             <p><strong>Price: </strong>{{property.price|floatformat:2}} CAD per night</p>
         </div>
         <a class="text-decoration-none" href="{% url 'host_profile_view' property.id %}"><img class="small-profile-pic" src="{{property.user.profilepicture_set.first.url}}"> {{property.user.username}}</a>
-        <p>Posted on {{property.date_listed}}.</p>
+        <span>posted on {{property.date_listed}}.</span>
         {% if property.user == request.user %}
         <div class="card-action">
             <a class="text-decoration-none" href="{% url 'property_update' property.id %}"><button class="btn btn-primary">Edit Property</button></a>
