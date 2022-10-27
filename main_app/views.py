@@ -1,3 +1,4 @@
+from unittest import skip
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
@@ -78,7 +79,7 @@ def property_detail(request, property_id):
     'property': property,
     'features_property_doesnt_have': features_property_doesnt_have,
     'availability_form' : availability_form,
-    'property_review_form' : property_review_form
+    'property_review_form' : property_review_form,
   })
 
 class PropertyCreate(CreateView):
@@ -198,3 +199,9 @@ def like_index(request):
   return render(request, 'user/like.html',{
     "likes" : likes
   })
+
+def add_like(request,property_id):
+  if not Property.objects.filter(id = property_id).exists():
+    new_like = Like(property = Property.objects.get(id = property_id))
+    new_like.save()
+  return redirect('property_detail', property_id = property_id)
