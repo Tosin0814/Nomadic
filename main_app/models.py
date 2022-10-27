@@ -98,9 +98,12 @@ class Availability(models.Model):
 
 
 class Like(models.Model):
+    name = models.CharField(max_length=10)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return  f"{self.property.title}"
 
 class Review(models.Model):
     user_name = models.CharField(max_length=100)

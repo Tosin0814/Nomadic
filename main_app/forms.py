@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 from django.forms import ModelForm
-from main_app.models import Availability, Review
+from main_app.models import Availability, Review,Like
 
 
 
@@ -40,3 +40,8 @@ class PropertyReviewForm(ModelForm):
     class Meta:
         model = Review
         fields = ['rating', 'review_text']
+
+class LikeForm(ModelForm):
+    class Meta:
+        model = Like
+        fields = "__all__"

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from .forms import NewUserForm, AvailabilityForm, PropertyReviewForm
+from .forms import NewUserForm, AvailabilityForm, PropertyReviewForm,LikeForm
 from django.views.generic import ListView, DeleteView, DetailView, UpdateView, CreateView
 from django.contrib import messages
 from .models import ProfilePicture, User, Property, PropertyFeature, Photo, Availability, Like, Review
@@ -192,3 +192,9 @@ def review_property(request, property_id):
 class HostProfileView(DetailView):
   model = Property
   template_name = 'property/host_profile.html'
+
+def like_index(request):
+  likes = Like.objects.all()
+  return render(request, 'user/like.html',{
+    "likes" : likes
+  })
