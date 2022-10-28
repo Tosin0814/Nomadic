@@ -63,7 +63,6 @@ class PropertyList(ListView):
 @login_required
 def property_detail(request, property_id):
   user_like = Like.objects.filter(property=property_id, user=request.user)
-  print(f"User Like: {user_like}")
   property = Property.objects.get(id=property_id)
   property_review_form = PropertyReviewForm
   features_property_doesnt_have = PropertyFeature.objects.exclude(id__in = property.property_features.all().values_list('id'))
