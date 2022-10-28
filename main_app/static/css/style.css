@@ -73,8 +73,10 @@ body {
 }
 
 .index-photo{
-  max-height: 280px;
-  max-width: 350px;
+  height: 280px;
+  width: 350px;
+  object-fit: cover;
+  border-radius: 5px;
 }
 
 .profile-property-card{
@@ -84,8 +86,10 @@ body {
 }
 
 .profile-property-photo{
-  max-height: 200px;
-  max-width: 300px;
+  height: 200px;
+  width: 300px;
+  object-fit: cover;
+  border-radius: 5px;
 }
 .profile-property-div{
   height: 350px;
