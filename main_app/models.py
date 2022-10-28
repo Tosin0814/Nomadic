@@ -117,3 +117,6 @@ class Review(models.Model):
     def __str__(self):
         # Nice method for obtaining the friendly value of a Field.choice
         return f"By {self.user_name} on {self.date}"
+
+    class Meta:
+        ordering = ['-date']
