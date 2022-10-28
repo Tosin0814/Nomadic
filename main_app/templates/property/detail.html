@@ -5,8 +5,29 @@
 {% endblock %}
 
 {% block content %}
+{% load static %}
 <div class="main-content">
-    <div class="m-4"><h3>{{property.title}}</h3></div>
+    <div class="m-4 d-flex flex-row justify-content-between">
+        <div>
+            <h3>{{property.title}}</h3>
+        </div>
+        <!-- like or unlike -->
+        <div class="p3">
+            {% if not user_like %}
+            <form action="{% url 'add_like' property.id %}" method="post">
+                {% csrf_token %}
+                {{like_form.as_p}}
+                <button type="submit" class="btn btn-small btn-light" >Like <img src="{% static 'images/heart.svg' %}"></button>
+            </form>
+            {% elif user_like %}
+            <form action="{% url 'remove_like' property.id %}" method="post">
+                {% csrf_token %}
+                {{like_form.as_p}}
+                <button type="submit" class="btn btn-small btn-light">Liked <img src="{% static 'images/heart-fill.svg' %}"></button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
     {% if property.photo_set.all %}
     <div id="carousel" class="card carousel slide w-100 mx-auto bg-light" data-ride="carousel">
         <div class="carousel-inner mx-auto">
@@ -135,21 +156,7 @@
                 <input type="submit" class="btn-primary" value="Add Avaibility">
             </form>
         </div>
-    </div>
-
-    <!-- add_like -->
-    <div class="p3">
-        <form action="{% url 'add_like' property.id %}" method="post">
-            {% csrf_token %}
-            {{like_form.as_p}}
-            <button type="submit" class="btn btn-small btn-success" >Add to Likes</button>
-        </form>
-        <form action="{% url 'add_dislike' property.id %}" method="post">
-            {% csrf_token %}
-            {{like_form.as_p}}
-            <button type="submit" class="btn btn-small btn-danger">Dislike to Likes</button>
-        </form>
-    </div>
+    </div>    
     <br>
     <br>
     

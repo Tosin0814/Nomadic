@@ -71,15 +71,18 @@ class PropertyList(ListView):
 
 
 def property_detail(request, property_id):
+  user_like = Like.objects.filter(property=property_id, user=request.user)
+  print(f"User Like: {user_like}")
   property = Property.objects.get(id=property_id)
   property_review_form = PropertyReviewForm
   features_property_doesnt_have = PropertyFeature.objects.exclude(id__in = property.property_features.all().values_list('id'))
-  availability_form = AvailabilityForm()
+  availability_form = AvailabilityForm
   return render(request, 'property/detail.html',{
     'property': property,
     'features_property_doesnt_have': features_property_doesnt_have,
     'availability_form' : availability_form,
     'property_review_form' : property_review_form,
+    'user_like': user_like,
   })
 
 class PropertyCreate(CreateView):
@@ -194,21 +197,19 @@ class HostProfileView(DetailView):
   model = Property
   template_name = 'property/host_profile.html'
 
-def like_index(request):
-  likes = Like.objects.all()
-  return render(request, 'user/like.html',{
-    "likes" : likes
-  })
+# Like
 
-def add_like(request,property_id):
-  add_property = Property.objects.get(id = property_id)
-  if not Like.objects.filter(property = add_property).exists():
-      new_like = Like(property = add_property)
+def add_like(request, property_id):
+    property = Property.objects.get(id = property_id)
+    user = request.user
+    if not Like.objects.filter(property = property, user = user).exists():
+      new_like = Like(property = property, user = user)
       new_like.save()
-  return redirect('property_detail', property_id = property_id)
+    return redirect('property_detail', property_id = property_id)
 
-def add_dislike(request,property_id):
-  add_property = Property.objects.get(id = property_id)
-  if Like.objects.filter(property = add_property).exists():
-     Like.objects.filter(property = add_property).delete()
-  return redirect('like')
+def remove_like(request,property_id):
+  property = Property.objects.get(id = property_id)
+  user = request.user
+  if Like.objects.filter(property = property, user = user).exists():
+     Like.objects.filter(property = property, user = user).delete()
+  return redirect('property_detail', property_id = property_id)

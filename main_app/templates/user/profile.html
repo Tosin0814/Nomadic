@@ -80,11 +80,11 @@
             </div>
             <div class="p-3 mx-auto">
                 {% for like in user.like_set.all%}
-                <a class="text-decoration-none text-center" href="{% url 'property_detail' property.id %}">
+                <a class="text-decoration-none text-center" href="{% url 'property_detail' like.property.id %}">
                     <div class="card flex-container profile-property-card" >
                         {% if like.property.photo_set.first %}
                         <div class="text-center">
-                            <img class="profile-property-photo" src="{{property.photo_set.first.photo_url}}" alt="No image">
+                            <img class="profile-property-photo" src="{{like.property.photo_set.first.photo_url}}" alt="No image">
                         </div>
                         {% else %}
                         <div class="text-center text-dark">
