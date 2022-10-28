@@ -102,7 +102,7 @@ class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return  f"{self.property.title} for {self.user}"
+        return  f"{self.user} likes {self.property.title}"
 
 class Review(models.Model):
     user_name = models.CharField(max_length=100)

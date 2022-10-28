@@ -37,5 +37,5 @@ urlpatterns = [
     path('property/<int:pk>/host_profile/', views.HostProfileView.as_view(), name='host_profile_view'),
 
     path('property/<int:property_id>/add_like', views.add_like,name="add_like"),
-    path('property/<int:property_id>/add_unlike', views.add_unlike, name="add_unlike")
+    path('property/<int:property_id>/remove_like', views.remove_like, name="remove_like")
 ]

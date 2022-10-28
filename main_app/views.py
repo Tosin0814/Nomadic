@@ -194,17 +194,19 @@ class HostProfileView(DetailView):
   model = Property
   template_name = 'property/host_profile.html'
 
-# Add Like
+# Like
 
 def add_like(request, property_id):
-    like_property = Property.objects.get(id = property_id)
-    if not Like.objects.filter(property = like_property).exists():
-      new_like = Like(property = like_property , user = request.user)
+    property = Property.objects.get(id = property_id)
+    user = request.user
+    if not Like.objects.filter(property = property, user = user).exists():
+      new_like = Like(property = property, user = user)
       new_like.save()
     return redirect('property_detail', property_id = property_id)
 
-def add_unlike(request,property_id):
-  add_property = Property.objects.get(id = property_id)
-  if Like.objects.filter(property = add_property).exists():
-     Like.objects.filter(property = add_property).delete()
-  return redirect('profile_view', request.user.id)
+def remove_like(request,property_id):
+  property = Property.objects.get(id = property_id)
+  user = request.user
+  if Like.objects.filter(property = property, user = user).exists():
+     Like.objects.filter(property = property, user = user).delete()
+  return redirect('property_detail', property_id = property_id)
