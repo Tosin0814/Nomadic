@@ -2,6 +2,7 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+    font-family: 'Roboto', sans-serif;
   }
   
   main {
@@ -17,6 +18,16 @@ body {
 .main-content{
   width: 75%;
   margin: 0 auto;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.navbar-head {
+  font-family: 'Courgette', cursive;
+  font-weight:900;
+  font-size: 30px;
+  text-decoration: none;
+  color: black;
 }
 
 .profile-img{
