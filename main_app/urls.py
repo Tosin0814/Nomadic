@@ -4,9 +4,8 @@ from . import views
 urlpatterns = [
     ## View Function removed
     # path('', views.index, name='index'),
-    path('accounts/', views.choose_signup, name='choose_signup'),
+    # path('accounts/', views.choose_signup, name='choose_signup'),
     path('accounts/signup/', views.signup, name='signup'),
-    path('profile/<int:pk>/', views.ProfilePage.as_view(), name='profile_page'),
 
     # Added paths
     path('', views.PropertyList.as_view(), name='home'),
@@ -36,7 +35,6 @@ urlpatterns = [
     # Host Profile
     path('property/<int:pk>/host_profile/', views.HostProfileView.as_view(), name='host_profile_view'),
 
-    path('likes/', views.like_index, name="like"),
     path('property/<int:property_id>/add_like', views.add_like,name="add_like"),
-    path('property/<int:property_id>/add_dislike', views.add_dislike, name="add_dislike")
+    path('property/<int:property_id>/remove_like', views.remove_like, name="remove_like")
 ]

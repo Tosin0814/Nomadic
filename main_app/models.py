@@ -99,9 +99,10 @@ class Availability(models.Model):
 
 class Like(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return  f"{self.property.title}"
+        return  f"{self.user.username} likes {self.property.title}"
 
 class Review(models.Model):
     user_name = models.CharField(max_length=100)
@@ -116,3 +117,6 @@ class Review(models.Model):
     def __str__(self):
         # Nice method for obtaining the friendly value of a Field.choice
         return f"By {self.user_name} on {self.date}"
+
+    class Meta:
+        ordering = ['-date']

@@ -5,8 +5,29 @@
 {% endblock %}
 
 {% block content %}
+{% load static %}
 <div class="main-content">
-    <div class="m-4"><h3>{{property.title}}</h3></div>
+    <div class="m-4 d-flex flex-row justify-content-between">
+        <div>
+            <h3>{{property.title}}</h3>
+        </div>
+        <!-- like or unlike -->
+        <div class="p3">
+            {% if not user_like %}
+            <form action="{% url 'add_like' property.id %}" method="post">
+                {% csrf_token %}
+                {{like_form.as_p}}
+                <button type="submit" class="btn btn-small btn-light" >Like <img src="{% static 'images/heart.svg' %}"></button>
+            </form>
+            {% elif user_like %}
+            <form action="{% url 'remove_like' property.id %}" method="post">
+                {% csrf_token %}
+                {{like_form.as_p}}
+                <button type="submit" class="btn btn-small btn-light">Liked <img src="{% static 'images/heart-fill.svg' %}"></button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
     {% if property.photo_set.all %}
     <div id="carousel" class="card carousel slide w-100 mx-auto bg-light" data-ride="carousel">
         <div class="carousel-inner mx-auto">
@@ -42,114 +63,103 @@
             <a class="text-decoration-none" href="{% url 'delete_photo_page' property.id %}"><button class="btn btn-sm btn-secondary">Edit Photos</button></a>
         </div>
     </div>
-    <br>
-    <br>
     {% endif %}
     <div class="p-3">
-        <div>
-            <div><h5> Description: </h5><p>{{property.description}}</p></div>
-            <br>
-            <p><strong>Location: </strong>{{property.location}}</p>
-            <p><strong>Price: </strong>{{property.price|floatformat:2}} CAD per night</p>
+        <div class="row border border-light shadow-sm p-2">
+            <div>
+                <div><h5> Description: </h5><p class="ml-2">{{property.description}}</p></div>
+                <p><strong>Location: </strong>{{property.location}}</p>
+                <p><strong>Price: </strong>{{property.price|floatformat:2}} CAD per night</p>
+            </div>
+            <a class="text-decoration-none" href="{% url 'host_profile_view' property.id %}"><img class="small-profile-pic" src="{{property.user.profilepicture_set.first.url}}"> {{property.user.username}}</a>
+            <span>Posted on {{property.date_listed}}.</span>
+            {% if property.user == request.user %}
+            <div class="">
+                <a class="text-decoration-none" href="{% url 'property_update' property.id %}"><button class="btn btn-primary">Edit Property</button></a>
+                <a class="text-decoration-none" href="{% url 'property_delete' property.id %}"><button class="btn btn-danger">Delete Property</button></a>
+            </div>
+            {% endif %}
         </div>
-        <a class="text-decoration-none" href="{% url 'host_profile_view' property.id %}"><img class="small-profile-pic" src="{{property.user.profilepicture_set.first.url}}"> {{property.user.username}}</a>
-        <span>posted on {{property.date_listed}}.</span>
-        {% if property.user == request.user %}
-        <div class="card-action">
-            <a class="text-decoration-none" href="{% url 'property_update' property.id %}"><button class="btn btn-primary">Edit Property</button></a>
-            <a class="text-decoration-none" href="{% url 'property_delete' property.id %}"><button class="btn btn-danger">Delete Property</button></a>
+        <br>
+        <div class="row">
+            <div class="border border-light shadow-sm p-5 col">
+                <h4  class="text-center">Features</h4>
+                <br>
+                <table class="">
+                    {% for property_feature in property.property_features.all %}
+                        <tr>
+                            <td>
+                                {{property_feature.feature}}
+        
+                            </td>
+        
+                            {% if property.user == request.user %}
+                                <td class="">
+                                    <form action="{% url 'dissociate_property_feature' property.id property_feature.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger">X</button>
+                                    </form>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% empty %}
+                        <div>No features listed on this property</div>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="col border border-light shadow-sm p-5">
+                <h4 class="text-center">Availability</h4>
+                <br>
+                {% for availability in property.availability_set.all %}
+                <div class="">
+                    <p>From <strong>{{availability.from_date}}</strong> to <strong>{{availability.till_date}}</strong></p>
+                    {% if property.user == request.user %}
+                    <a href="{% url 'update_availability' property.id availability.id %}"><button class="btn btn-sm btn-primary">Update Availability</button></a>
+                    <a href="{% url 'delete_availability' property.id availability.id %}"><button class="btn btn-sm btn-danger">Delete Availability</button></a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
         </div>
-        <br><br>
-        {% endif %}
-        <div>
-            <h4>Listed Property Features:</h4>
-            <table>
-                {% for property_feature in property.property_features.all %}
-                    <tr>
-                        <td>
-                            {{property_feature.feature}}
-    
-                        </td>
-    
-                        {% if property.user == request.user %}
+    </div>
+
+    <div class="p-3 row">
+        <div class="p-3 col">
+            {% if property.user == request.user %}
+                <h4>Add Features</h4>
+                <table>
+                    {% for property_feature in features_property_doesnt_have.all %}
+                        <tr>
+                            <td>
+                                {{property_feature.feature}}
+                            </td>
                             <td class="">
-                                <form action="{% url 'dissociate_property_feature' property.id property_feature.id %}" method="post">
+                                <form action="{% url 'associate_property_feature' property.id property_feature.id %}" method="post">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-small btn-danger">X</button>
+                                    <button type="submit" class="btn btn-sm btn-success">Add</button>
                                 </form>
                             </td>
-                        {% endif %}
-                    </tr>
-                {% empty %}
-                    <div>No features listed on this property</div>
-                {% endfor %}
-            </table>
+                        </tr>
+                    {% empty %}
+                        <div>All available features are listed on this property</div>
+                    {% endfor %}
+                </table>
+            {% endif %}
         </div>
-        {% if property.user == request.user %}
-        <div>
-            <h4>Add Features to Properties</h4>
-            <table>
-                {% for property_feature in features_property_doesnt_have.all %}
-                    <tr>
-                        <td>
-                            {{property_feature.feature}}
-                        </td>
-                        <td class="">
-                            <form action="{% url 'associate_property_feature' property.id property_feature.id %}" method="post">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-small btn-success">Add</button>
-                            </form>
-                        </td>
-                    </tr>
-                {% empty %}
-                    <div>All available features are listed on this property</div>
-                {% endfor %}
-            </table>
+        <div class="p-3 col">
+            {% if property.user == request.user %}
+            <div>
+                <h4>Add Availability</h4>
+                <form action="{% url 'add_availability' property.id %}" method="post">
+                    {% csrf_token %}
+                    <table>{{availability_form.as_table}}</table>
+                    <br>
+                    <input type="submit" class="btn btn-sm btn-success" value="Add">
+                </form>
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
-    </div>
-
-    <!-- Availability -->
-    <div class="p3">
-        <h4>Availability to Properties</h4>
-        {% for availability in property.availability_set.all %}
-        <div>
-            <br>
-            Booking Date:
-            <br>
-            {{availability.from_date}}
-            <br>
-            {{availability.till_date}}
-            <form action="{% url 'delete_availability' property.id availability.id %}" method="POST">
-                {% csrf_token %}
-                <input type="submit" value="Delete an Available">
-            </form>
-            <a href="{% url 'update_availability' property.id availability.id %}">Update an Available</a>
-        {% endfor %}
-
-        </div>
-        <div>
-            <form action="{% url 'add_availability' property.id %}" method="post">
-                {% csrf_token %}
-                {{availability_form.as_table}}
-                <input type="submit" class="btn-primary" value="Add Avaibility">
-            </form>
-        </div>
-    </div>
-
-    <!-- add_like -->
-    <div class="p3">
-        <form action="{% url 'add_like' property.id %}" method="post">
-            {% csrf_token %}
-            {{like_form.as_p}}
-            <button type="submit" class="btn btn-small btn-success" >Add to Likes</button>
-        </form>
-        <form action="{% url 'add_dislike' property.id %}" method="post">
-            {% csrf_token %}
-            {{like_form.as_p}}
-            <button type="submit" class="btn btn-small btn-danger">Dislike to Likes</button>
-        </form>
-    </div>
+    </div>    
     <br>
     <br>
     
@@ -157,7 +167,7 @@
     <div class="p-5 border-light container justify-content-center">
         <div class=" w-70 card row justify-content-center mx-auto">
             <div class="col bg-light">
-                <h3 class="text-center mt-2">Review Property</h3>
+                <h4 class="text-center mt-2">Review Property</h4>
                 <br>
                 <div class="p-3 text-center">
                     <form id="add-review-form" class="row g-1" action="{% url 'review_property' property.id %}" method="post">
@@ -173,7 +183,7 @@
     <br>
     <br>
     <div class="card col customer-reviews p-5">
-        <h3 class="text-center">Customer Reviews</h3>
+        <h4 class="text-center">Customer Reviews</h4>
         <br>
         {% for review in property.review_set.all %}
             <div class="border border-secondary p-2 mb-2 review">
@@ -185,7 +195,7 @@
             </div>
             <br>
         {% empty %}
-            <div class="card-panel teal-text center-align">No Reviews</div>
+            <div class="card-panel center-align">No Reviews</div>
         {% endfor %}
     </div>
 </div>
