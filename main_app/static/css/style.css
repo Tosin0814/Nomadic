@@ -19,6 +19,14 @@ body {
   margin: 0 auto;
 }
 
+.navbar-head {
+  font-family: 'Courgette', cursive;
+  font-weight:900;
+  font-size: 30px;
+  text-decoration: none;
+  color: black;
+}
+
 .profile-img{
   /* max-width: 200px; */
   max-height: 200px;
