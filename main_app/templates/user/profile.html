@@ -84,7 +84,7 @@
                     <div class="card flex-container profile-property-card" >
                         {% if like.property.photo_set.first %}
                         <div class="text-center">
-                            <img class="profile-property-photo" src="{{property.photo_set.first.photo_url}}" alt="No image">
+                            <img class="profile-property-photo" src="{{like.property.photo_set.first.photo_url}}" alt="No image">
                         </div>
                         {% else %}
                         <div class="text-center text-dark">

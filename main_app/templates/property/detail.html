@@ -13,17 +13,17 @@
         </div>
         <!-- like or unlike -->
         <div class="p3">
-            {% if user not in property.like_set.user_set.all %}
+            {% if not user_like %}
             <form action="{% url 'add_like' property.id %}" method="post">
                 {% csrf_token %}
                 {{like_form.as_p}}
                 <button type="submit" class="btn btn-small btn-light" >Like <img src="{% static 'images/heart.svg' %}"></button>
             </form>
-            {% elif user in property.like_set.user_set.all %}
+            {% elif user_like %}
             <form action="{% url 'remove_like' property.id %}" method="post">
                 {% csrf_token %}
                 {{like_form.as_p}}
-                <button type="submit" class="btn btn-small btn-light">liked <img src="{% static 'images/heart-fill.svg' %}"></button>
+                <button type="submit" class="btn btn-small btn-light">Liked <img src="{% static 'images/heart-fill.svg' %}"></button>
             </form>
             {% endif %}
         </div>
