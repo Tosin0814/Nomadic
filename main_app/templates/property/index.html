@@ -5,30 +5,29 @@
 {% endblock %}
 
 {% block content %}
-
-<!-- <h1>Hello {{request.user}}</h1>
-<h2>Property Listings</h2> -->
-<div class="m-5 d-flex flex-row flex-wrap justify-content-between">
-    {% for property in property_list %}
-    <a class="text-decoration-none m-4" href="{% url 'property_detail' property.id %}">
-        <div class="card flex-container index-photo-card" >
-            {% if property.photo_set.first %}
-            <div class="text-center">
-                <img class="index-photo" src="{{property.photo_set.first.photo_url}}" alt="No image">
+<div class="index-content">
+    <div class="m-5 d-flex flex-row flex-wrap justify-content-between">
+        {% for property in property_list %}
+        <a class="text-decoration-none m-4" href="{% url 'property_detail' property.id %}">
+            <div class="card flex-container index-photo-card" >
+                {% if property.photo_set.first %}
+                <div class="text-center">
+                    <img class="index-photo" src="{{property.photo_set.first.photo_url}}" alt="No image">
+                </div>
+                {% else %}
+                <div class="text-center text-dark">
+                    <p>No Image</p>
+                </div>
+                {% endif %}
             </div>
-            {% else %}
-            <div class="text-center text-dark">
-                <p>No Image</p>
+            <div class="">
+                <p class="text-center text-dark"><strong>{{property.title}}</strong></p>
+                <p class="text-center text-dark">{{property.location}}</p>
+                <p class="text-center text-dark">{{property.price|floatformat:2}} CAD per night</p>
             </div>
-            {% endif %}
-        </div>
-        <div class="">
-            <p class="text-center text-dark"><strong>{{property.title}}</strong></p>
-            <p class="text-center text-dark">{{property.location}}</p>
-            <p class="text-center text-dark">{{property.price|floatformat:2}} CAD per night</p>
-        </div>
-    </a>
-    {% endfor %}
+        </a>
+        {% endfor %}
+    </div>
 </div>
 
 {% endblock %}
