@@ -76,14 +76,14 @@
         <a class="text-decoration-none" href="{% url 'host_profile_view' property.id %}"><img class="small-profile-pic" src="{{property.user.profilepicture_set.first.url}}"> {{property.user.username}}</a>
         <span>posted on {{property.date_listed}}.</span>
         {% if property.user == request.user %}
-        <div class="card-action">
+        <div class="">
             <a class="text-decoration-none" href="{% url 'property_update' property.id %}"><button class="btn btn-primary">Edit Property</button></a>
             <a class="text-decoration-none" href="{% url 'property_delete' property.id %}"><button class="btn btn-danger">Delete Property</button></a>
         </div>
         <br><br>
         {% endif %}
-        <div>
-            <h4>Listed Property Features:</h4>
+        <div class="border border-light shadow-sm p-2">
+            <h4>Property Features</h4>
             <table>
                 {% for property_feature in property.property_features.all %}
                     <tr>
@@ -96,7 +96,7 @@
                             <td class="">
                                 <form action="{% url 'dissociate_property_feature' property.id property_feature.id %}" method="post">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-small btn-danger">X</button>
+                                    <button type="submit" class="btn btn-sm btn-danger">X</button>
                                 </form>
                             </td>
                         {% endif %}
@@ -107,7 +107,7 @@
             </table>
         </div>
         {% if property.user == request.user %}
-        <div>
+        <div class="p-2">
             <h4>Add Features to Properties</h4>
             <table>
                 {% for property_feature in features_property_doesnt_have.all %}
@@ -118,7 +118,7 @@
                         <td class="">
                             <form action="{% url 'associate_property_feature' property.id property_feature.id %}" method="post">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-small btn-success">Add</button>
+                                <button type="submit" class="btn btn-sm btn-success">Add</button>
                             </form>
                         </td>
                     </tr>
@@ -131,31 +131,27 @@
     </div>
 
     <!-- Availability -->
-    <div class="p3">
-        <h4>Availability to Properties</h4>
+    <div class="p-3">
+        <h4>Property Availability</h4>
         {% for availability in property.availability_set.all %}
-        <div>
-            <br>
-            Booking Date:
-            <br>
-            {{availability.from_date}}
-            <br>
-            {{availability.till_date}}
-            <form action="{% url 'delete_availability' property.id availability.id %}" method="POST">
-                {% csrf_token %}
-                <input type="submit" value="Delete an Available">
-            </form>
-            <a href="{% url 'update_availability' property.id availability.id %}">Update an Available</a>
-        {% endfor %}
-
+        <div class="mb-2 border border-light shadow-sm p-2">
+            <p>From <strong>{{availability.from_date}}</strong> to <strong>{{availability.till_date}}</strong></p>
+            {% if property.user == request.user %}
+            <a href="{% url 'update_availability' property.id availability.id %}"><button class="btn btn-sm btn-primary">Update Availability</button></a>
+            <a href="{% url 'delete_availability' property.id availability.id %}"><button class="btn btn-sm btn-danger">Delete Availability</button></a>
+            {% endif %}
         </div>
+        {% endfor %}
+        {% if property.user == request.user %}
+        <br>
         <div>
             <form action="{% url 'add_availability' property.id %}" method="post">
                 {% csrf_token %}
-                {{availability_form.as_table}}
-                <input type="submit" class="btn-primary" value="Add Avaibility">
+                <table>{{availability_form.as_table}}</table>
+                <input type="submit" class="btn btn-outline-primary" value="Add Avaibility">
             </form>
         </div>
+        {% endif %}
     </div>    
     <br>
     <br>
