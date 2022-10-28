@@ -80,7 +80,7 @@
             </div>
             <div class="p-3 mx-auto">
                 {% for like in user.like_set.all%}
-                <a class="text-decoration-none text-center" href="{% url 'property_detail' property.id %}">
+                <a class="text-decoration-none text-center" href="{% url 'property_detail' like.property.id %}">
                     <div class="card flex-container profile-property-card" >
                         {% if like.property.photo_set.first %}
                         <div class="text-center">

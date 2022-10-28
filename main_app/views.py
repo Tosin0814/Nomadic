@@ -74,7 +74,7 @@ def property_detail(request, property_id):
   property = Property.objects.get(id=property_id)
   property_review_form = PropertyReviewForm
   features_property_doesnt_have = PropertyFeature.objects.exclude(id__in = property.property_features.all().values_list('id'))
-  availability_form = AvailabilityForm()
+  availability_form = AvailabilityForm
   return render(request, 'property/detail.html',{
     'property': property,
     'features_property_doesnt_have': features_property_doesnt_have,
@@ -194,21 +194,17 @@ class HostProfileView(DetailView):
   model = Property
   template_name = 'property/host_profile.html'
 
-def like_index(request):
-  likes = Like.objects.all()
-  return render(request, 'user/like.html',{
-    "likes" : likes
-  })
+# Add Like
 
-def add_like(request,property_id):
-  add_property = Property.objects.get(id = property_id)
-  if not Like.objects.filter(property = add_property).exists():
-      new_like = Like(property = add_property)
+def add_like(request, property_id):
+    like_property = Property.objects.get(id = property_id)
+    if not Like.objects.filter(property = like_property).exists():
+      new_like = Like(property = like_property , user = request.user)
       new_like.save()
-  return redirect('property_detail', property_id = property_id)
+    return redirect('property_detail', property_id = property_id)
 
-def add_dislike(request,property_id):
+def add_unlike(request,property_id):
   add_property = Property.objects.get(id = property_id)
   if Like.objects.filter(property = add_property).exists():
      Like.objects.filter(property = add_property).delete()
-  return redirect('like')
+  return redirect('profile_view', request.user.id)

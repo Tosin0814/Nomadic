@@ -50,4 +50,4 @@ class PropertyReviewForm(ModelForm):
 class LikeForm(ModelForm):
     class Meta:
         model = Like
-        fields = ["property"]
+        fields = "__all__"
