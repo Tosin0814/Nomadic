@@ -28,7 +28,7 @@ def signup(request):
       user = form.save()
       # Login after signing up
       login(request, user)
-      return redirect('profile_page', pk = user.id)
+      return redirect('profile_view', pk = user.id)
     else:
       error_message = 'Invalid sign up - try again'
   # A bad POST or a GET request, so render signup.html with an empty form
