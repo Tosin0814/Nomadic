@@ -126,9 +126,9 @@
                         {% else %}
                         <button disabled class="btn btn-sm btn-secondary">Reserved</button>
                             {% if request.user.id in reservation_user %}
-                            <form action="{% url 'cancel_reservation' property.id availability.id %}" method="post">
+                            <form class="" action="{% url 'cancel_reservation' property.id availability.id %}" method="post">
                                 {% csrf_token %}
-                                <button type="submit">Cancel Reservation</button>
+                                <button class="btn btn-sm btn-danger" type="submit">Cancel Reservation</button>
                             </form>
                             {% endif %}
                         {% endif %}
