@@ -66,10 +66,10 @@ def property_detail(request, property_id):
   not_available_list = []
   user_like = Like.objects.filter(property=property_id, user=request.user)
   property = Property.objects.get(id=property_id)
-  not_available = Reservation.objects.filter(property = property_id).availability_set.all()
-  for availability in not_available:
-    not_available_list.append(availability.availablity)
-
+  not_available = Reservation.objects.filter(property = property_id).values_list('availability', flat=True)
+  reservation_user = Reservation.objects.filter(property = property_id, user=request.user).values_list('user', flat=True)
+  print(not_available)
+  print(reservation_user)
   property_review_form = PropertyReviewForm
   features_property_doesnt_have = PropertyFeature.objects.exclude(id__in = property.property_features.all().values_list('id'))
   availability_form = AvailabilityForm
@@ -80,7 +80,7 @@ def property_detail(request, property_id):
     'property_review_form' : property_review_form,
     'user_like': user_like,
     'not_available' : not_available,
-    'not_available_list' : not_available_list,
+    'reservation_user': reservation_user
   })
 
 class PropertyCreate(LoginRequiredMixin, CreateView):
@@ -229,4 +229,13 @@ def make_reservation(request, property_id, availability_id):
   if not Reservation.objects.filter(availability = availability).exists():
     new_reservation = Reservation(availability = availability, user = user, property = property)
     new_reservation.save()
+  return redirect('property_detail', property_id = property_id)
+
+
+def cancel_reservation(request, property_id, availability_id):
+  # property = Property.objects.get(id = property_id)
+  # reservation = Reservation.objects.get(availability = availability_id)
+  # user = request.user
+  if Reservation.objects.filter(availability = availability_id).exists():
+     Reservation.objects.filter(availability = availability_id).delete()
   return redirect('property_detail', property_id = property_id)

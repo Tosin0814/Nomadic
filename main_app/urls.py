@@ -39,5 +39,6 @@ urlpatterns = [
     path('property/<int:property_id>/remove_like', views.remove_like, name="remove_like"),
 
     path('property/<int:property_id>/make_reservation/<int:availability_id>', views.make_reservation, name='make_reservation'),
+    path('property/<int:property_id>/cancel_reservation/<int:availability_id>', views.cancel_reservation, name='cancel_reservation'),
     # path('profile/<int:pk>/reservation/', views.ReservationList.as_view(), name='reservation_list'),
 ]
