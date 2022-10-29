@@ -29,6 +29,10 @@ body {
   padding-bottom: 50px;
 }
 
+.reservation-page{
+  margin: 5px auto;
+}
+
 .navbar-head {
   font-family: 'Courgette', cursive;
   font-weight:900;
