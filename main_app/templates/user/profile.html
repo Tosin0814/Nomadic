@@ -47,7 +47,7 @@
             <div class="p-2 bg-light w-100">
                 <h3 class="text-center">Posted Properties</h3>
             </div>
-            <div class="p-3 mx-auto scroll">
+            <div class="p-3 mx-auto w-100 scroll">
                 {% for property in user.property_set.all%}
                 <a class="text-decoration-none text-center" href="{% url 'property_detail' property.id %}">
                     <div class="card flex-container profile-property-card" >
@@ -61,7 +61,7 @@
                         </div>
                         {% endif %}
                     </div>
-                    <div class="">
+                    <div class="profile-card-text">
                         <p class="text-center text-dark"><strong>{{property.title}}</strong></p>
                         <p class="text-center text-dark">{{property.location}}</p>
                         <p class="text-center text-dark">{{property.price|floatformat:2}} CAD per night</p>
@@ -78,7 +78,7 @@
             <div class="p-2 bg-light w-100">
                 <h3 class="text-center">Liked Properties</h3>
             </div>
-            <div class="p-3 mx-auto scroll">
+            <div class="p-3 mx-auto w-100 scroll">
                 {% for like in user.like_set.all%}
                 <a class="text-decoration-none text-center" href="{% url 'property_detail' like.property.id %}">
                     <div class="card flex-container profile-property-card" >
@@ -92,7 +92,7 @@
                         </div>
                         {% endif %}
                     </div>
-                    <div class="">
+                    <div class="profile-card-text">
                         <p class="text-center text-dark"><strong>{{like.property.title}}</strong></p>
                         <p class="text-center text-dark">{{like.property.location}}</p>
                         <p class="text-center text-dark">{{like.property.price|floatformat:2}} CAD per night</p>

@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="index-content">
-    <div class="m-5 d-flex flex-row flex-wrap justify-content-between">
+    <div class="m-5 d-flex flex-row flex-wrap justify-content-between align-items-start">
         {% for property in property_list %}
         <a class="text-decoration-none m-4" href="{% url 'property_detail' property.id %}">
             <div class="card flex-container index-photo-card" >
@@ -20,11 +20,11 @@
                 </div>
                 {% endif %}
             </div>
-            <div class="">
-                <p class="text-center text-dark"><strong>{{property.title}}</strong></p>
-                <p class="text-center text-dark">{{property.location}}</p>
-                <p class="text-center text-dark">{{property.price|floatformat:2}} CAD per night</p>
-            </div>
+                <div class="index-card-text">
+                    <p class="text-center text-dark"><strong>{{property.title}}</strong></p>
+                    <p class="text-center text-dark">{{property.location}}</p>
+                    <p class="text-center text-dark">{{property.price|floatformat:2}} CAD per night</p>
+                </div>
         </a>
         {% endfor %}
     </div>
