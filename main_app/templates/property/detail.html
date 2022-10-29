@@ -117,6 +117,18 @@
                     <a href="{% url 'update_availability' property.id availability.id %}"><button class="btn btn-sm btn-primary">Update Availability</button></a>
                     <a href="{% url 'delete_availability' property.id availability.id %}"><button class="btn btn-sm btn-danger">Delete Availability</button></a>
                     {% endif %}
+                    {% if property.user != request.user %}
+
+                        {% if not availability in not_available_list %}
+                        
+                        <form action="{% url 'make_reservation' property.id availability.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-primary">Reserve</button>
+                        </form>
+                        {% else %}
+                        <button disabled class="btn btn-sm btn-secondary">Reserved</button>
+                        {% endif %}
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>

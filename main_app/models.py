@@ -88,7 +88,7 @@ class Availability(models.Model):
     
     def __str__(self):
         # Nice method for obtaining the friendly value of a Field.choice
-        return f"{self.from_date} to {self.till_date}"
+        return f"{self.from_date} to {self.till_date} for {self.property.title}"
 
     class Meta:
         ordering = ['from_date']
@@ -120,3 +120,15 @@ class Review(models.Model):
 
     class Meta:
         ordering = ['-date']
+
+class Reservation(models.Model):
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
+    availability = models.ForeignKey(Availability, on_delete = models.CASCADE)
+    property = models.ForeignKey(Property, on_delete = models.CASCADE)
+    date = models.DateTimeField(default=datetime.now)
+
+    def __str__(self):
+        return f"{self.user} made reservation on {self.availability} "
+    
+    class Meta:
+        ordering = ['date']
