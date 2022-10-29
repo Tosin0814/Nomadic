@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+<div class="main-content">
     <h1>Delete property: {{ property.name }}</h1>
     <h4>Are you sure you want to delete this property?</h4>
     <form action="" method="POST">
@@ -12,4 +13,6 @@
         <input type="submit" value="Yes - Delete" class="btn btn-danger">
         <a href="{% url 'property_detail' property.id %}">Cancel</a>
     </form>
+</div>
+    
 {% endblock %}

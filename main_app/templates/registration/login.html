@@ -5,22 +5,24 @@
 {% endblock %}
 
 {% block content %}
-
-<div class="p-5 border-light container justify-content-center">
-    <div  class=" w-50 card row justify-content-center mx-auto">
-        <div class="col bg-light">
-            <h3 class="text-center mt-2">Log In</h3>
-            <br>
-            <div  class="p-3 text-center">
-                <form method="post" action="{% url 'login' %}" class="p-3 m-3">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <input type="submit" class="btn btn-primary" value="login">
-                    <input type="hidden" name="next" value="{{ next }}">
-                </form>
+<div class="main-content">
+    <div class="p-5 border-light container justify-content-center">
+        <div  class=" w-50 card row justify-content-center mx-auto">
+            <div class="col bg-light">
+                <h3 class="text-center mt-2">Log In</h3>
+                <br>
+                <div  class="p-3 text-center">
+                    <form method="post" action="{% url 'login' %}" class="p-3 m-3">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="submit" class="btn btn-primary" value="login">
+                        <input type="hidden" name="next" value="{{ next }}">
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 
 {% endblock %}

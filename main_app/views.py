@@ -63,13 +63,10 @@ class PropertyList(ListView):
 
 @login_required
 def property_detail(request, property_id):
-  not_available_list = []
   user_like = Like.objects.filter(property=property_id, user=request.user)
   property = Property.objects.get(id=property_id)
   not_available = Reservation.objects.filter(property = property_id).values_list('availability', flat=True)
   reservation_user = Reservation.objects.filter(property = property_id, user=request.user).values_list('user', flat=True)
-  print(not_available)
-  print(reservation_user)
   property_review_form = PropertyReviewForm
   features_property_doesnt_have = PropertyFeature.objects.exclude(id__in = property.property_features.all().values_list('id'))
   availability_form = AvailabilityForm
@@ -233,9 +230,12 @@ def make_reservation(request, property_id, availability_id):
 
 
 def cancel_reservation(request, property_id, availability_id):
-  # property = Property.objects.get(id = property_id)
-  # reservation = Reservation.objects.get(availability = availability_id)
-  # user = request.user
   if Reservation.objects.filter(availability = availability_id).exists():
      Reservation.objects.filter(availability = availability_id).delete()
   return redirect('property_detail', property_id = property_id)
+
+
+def reservation_list(request, user_id):
+  reservation_list = Reservation.objects.all()
+  context = {'reservation_list': reservation_list}
+  return render(request, 'user/reservations.html', context)
