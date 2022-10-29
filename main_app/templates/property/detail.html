@@ -111,7 +111,7 @@
                 <h4 class="text-center">Availability</h4>
                 <br>
                 {% for availability in property.availability_set.all %}
-                <div class="">
+                <div class="card border-light">
                     <p>From <strong>{{availability.from_date}}</strong> to <strong>{{availability.till_date}}</strong></p>
                     {% if property.user == request.user %}
                     <a href="{% url 'update_availability' property.id availability.id %}"><button class="btn btn-sm btn-primary">Update Availability</button></a>
@@ -134,6 +134,8 @@
                         {% endif %}
                     {% endif %}
                 </div>
+                <br>
+                <br>
                 {% endfor %}
             </div>
         </div>
