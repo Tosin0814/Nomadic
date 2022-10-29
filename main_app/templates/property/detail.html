@@ -111,13 +111,34 @@
                 <h4 class="text-center">Availability</h4>
                 <br>
                 {% for availability in property.availability_set.all %}
-                <div class="">
+                <div class="card border-light">
                     <p>From <strong>{{availability.from_date}}</strong> to <strong>{{availability.till_date}}</strong></p>
                     {% if property.user == request.user %}
-                    <a href="{% url 'update_availability' property.id availability.id %}"><button class="btn btn-sm btn-primary">Update Availability</button></a>
-                    <a href="{% url 'delete_availability' property.id availability.id %}"><button class="btn btn-sm btn-danger">Delete Availability</button></a>
+                        {% if availability.id in not_available %}
+                        <button disabled class="btn btn-sm btn-secondary">Reserved</button>
+                        <a href="{% url 'update_availability' property.id availability.id %}"><button class="btn btn-sm btn-primary">Update Availability</button></a>
+                        <a href="{% url 'delete_availability' property.id availability.id %}"><button class="btn btn-sm btn-danger">Delete Availability</button></a>
+                        {% endif %}
+                    {% endif %}
+                    {% if property.user != request.user %}
+                        {% if availability.id not in not_available %}
+                        <form action="{% url 'make_reservation' property.id availability.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-primary">Reserve</button>
+                        </form>
+                        {% else %}
+                        <button disabled class="btn btn-sm btn-secondary">Reserved</button>
+                            {% if request.user.id in reservation_user %}
+                            <form class="" action="{% url 'cancel_reservation' property.id availability.id %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn btn-sm btn-danger" type="submit">Cancel Reservation</button>
+                            </form>
+                            {% endif %}
+                        {% endif %}
                     {% endif %}
                 </div>
+                <br>
+                <br>
                 {% endfor %}
             </div>
         </div>
