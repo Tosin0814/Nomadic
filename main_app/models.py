@@ -51,7 +51,7 @@ class PropertyFeature(models.Model):
 class Property(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    description = models.TextField(max_length=800)
+    description = models.TextField(max_length=1200)
     location = models.CharField(max_length=100)
     property_features = models.ManyToManyField(PropertyFeature)
     price = models.FloatField()

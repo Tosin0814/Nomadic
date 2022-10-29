@@ -87,11 +87,20 @@ body {
   border-radius: 5px;
 }
 
+.index-card-text{
+  padding: 1px;
+  width: 250px;
+  text-align: center;
+  margin: 0 auto;
+  word-wrap: break-word;
+}
+
 .profile-property-card{
   background-color: rgba(169,169,169, 0.1);
   height: 150px;
   width: 200px;
   box-shadow: 2px 2px 3px gray;
+  margin: 0 auto;
 }
 
 .profile-property-photo{
@@ -100,6 +109,15 @@ body {
   object-fit: cover;
   border-radius: 5px;
 }
+
+.profile-card-text{
+  padding: 1px;
+  width: 150px;
+  text-align: center;
+  margin: 0 auto;
+  word-wrap: break-word;
+}
+
 .profile-property-div{
   height: 350px;
   width: 300px;
