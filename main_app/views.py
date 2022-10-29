@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import NewUserForm, AvailabilityForm, PropertyReviewForm,LikeForm
 from django.views.generic import ListView, DeleteView, DetailView, UpdateView, CreateView
 from django.contrib import messages
-from .models import ProfilePicture, User, Property, PropertyFeature, Photo, Availability, Like, Review
+from .models import ProfilePicture, User, Property, PropertyFeature, Photo, Availability, Like, Review,Reservation
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
@@ -65,6 +65,8 @@ class PropertyList(ListView):
 def property_detail(request, property_id):
   user_like = Like.objects.filter(property=property_id, user=request.user)
   property = Property.objects.get(id=property_id)
+  not_available = Reservation.objects.filter(property = property_id).values_list('availability', flat=True)
+  reservation_user = Reservation.objects.filter(property = property_id, user=request.user).values_list('user', flat=True)
   property_review_form = PropertyReviewForm
   features_property_doesnt_have = PropertyFeature.objects.exclude(id__in = property.property_features.all().values_list('id'))
   availability_form = AvailabilityForm
@@ -74,6 +76,8 @@ def property_detail(request, property_id):
     'availability_form' : availability_form,
     'property_review_form' : property_review_form,
     'user_like': user_like,
+    'not_available' : not_available,
+    'reservation_user': reservation_user
   })
 
 class PropertyCreate(LoginRequiredMixin, CreateView):
@@ -213,3 +217,25 @@ def remove_like(request,property_id):
   if Like.objects.filter(property = property, user = user).exists():
      Like.objects.filter(property = property, user = user).delete()
   return redirect('property_detail', property_id = property_id)
+
+
+def make_reservation(request, property_id, availability_id):
+  availability = Availability.objects.get(id = availability_id)
+  user = request.user
+  property = Property.objects.get(id = property_id)
+  if not Reservation.objects.filter(availability = availability).exists():
+    new_reservation = Reservation(availability = availability, user = user, property = property)
+    new_reservation.save()
+  return redirect('property_detail', property_id = property_id)
+
+
+def cancel_reservation(request, property_id, availability_id):
+  if Reservation.objects.filter(availability = availability_id).exists():
+     Reservation.objects.filter(availability = availability_id).delete()
+  return redirect('property_detail', property_id = property_id)
+
+
+def reservation_list(request, user_id):
+  reservation_list = Reservation.objects.all()
+  context = {'reservation_list': reservation_list}
+  return render(request, 'user/reservations.html', context)

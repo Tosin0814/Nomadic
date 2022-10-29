@@ -35,6 +35,11 @@ urlpatterns = [
     # Host Profile
     path('property/<int:pk>/host_profile/', views.HostProfileView.as_view(), name='host_profile_view'),
 
-    path('property/<int:property_id>/add_like', views.add_like,name="add_like"),
-    path('property/<int:property_id>/remove_like', views.remove_like, name="remove_like")
+    path('property/<int:property_id>/add_like/', views.add_like,name="add_like"),
+    path('property/<int:property_id>/remove_like/', views.remove_like, name="remove_like"),
+
+    path('property/<int:property_id>/make_reservation/<int:availability_id>/', views.make_reservation, name='make_reservation'),
+    path('property/<int:property_id>/cancel_reservation/<int:availability_id>/', views.cancel_reservation, name='cancel_reservation'),
+    path('reservations/<int:user_id>/', views.reservation_list, name='reservation_list'),
+
 ]
