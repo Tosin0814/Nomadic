@@ -9,6 +9,7 @@ from django.contrib import messages
 from .models import ProfilePicture, User, Property, PropertyFeature, Photo, Availability, Like, Review
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.decorators.csrf import csrf_exempt
 
 S3_BASE_URL = 'https://s3-ca-central-1.amazonaws.com/'
 BUCKET = 'nomadic-project'
@@ -27,7 +28,7 @@ def signup(request):
       user = form.save()
       # Login after signing up
       login(request, user)
-      return redirect('profile_page', pk = user.id)
+      return redirect('profile_view', pk = user.id)
     else:
       error_message = 'Invalid sign up - try again'
   # A bad POST or a GET request, so render signup.html with an empty form
@@ -195,6 +196,7 @@ class HostProfileView(LoginRequiredMixin, DetailView):
 
 # Like
 @login_required
+@csrf_exempt
 def add_like(request, property_id):
     property = Property.objects.get(id = property_id)
     user = request.user
@@ -202,7 +204,9 @@ def add_like(request, property_id):
       new_like = Like(property = property, user = user)
       new_like.save()
     return redirect('property_detail', property_id = property_id)
+
 @login_required
+@csrf_exempt
 def remove_like(request,property_id):
   property = Property.objects.get(id = property_id)
   user = request.user
