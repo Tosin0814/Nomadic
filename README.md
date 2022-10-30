@@ -7,9 +7,37 @@
 
 ## Landing page
 
-<img src = "main_app/static/images/markdown/Landing page.png">
+<img src = "main_app/static/images/markdown/Landing Page.png">
 
 - Non-login User can view all listing properties - with property title, place, and price.
+
+## My Profile Page
+
+<img src = "main_app/static/images/markdown/My Profile.png">
+
+- Login User have access to user profile page, user can add/edit profile photo, and edit user information.
+
+- In profile page, user can checkout their 'Posted Properties' - As the Host.
+
+- In profile page, user can checkout their 'Liked Properties' - As the traveller.
+
+## Host adding properties & modifing 'Posted Property' detail page
+
+<img src = "main_app/static/images/markdown/Add Property.png">
+
+- Host input basic property information in 'Add Property' page.
+
+<img src = "main_app/static/images/markdown/Property Detail - 1.png">
+<img src = "main_app/static/images/markdown/Property Detail - 2.png">
+
+- In property detail page
+
+    - Host can add/edit property photos
+    - Host can edit/delete property information
+    - Host can add/delete property features - features are defined by admin and cannot modify by user
+    - Host can add/update/delete Availability time for travellers
+
+
 
 # Technologies Used
 
