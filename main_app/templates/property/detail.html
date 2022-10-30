@@ -116,9 +116,10 @@
                     {% if property.user == request.user %}
                         {% if availability.id in not_available %}
                         <button disabled class="btn btn-sm btn-secondary">Reserved</button>
-                        <a href="{% url 'update_availability' property.id availability.id %}"><button class="btn btn-sm btn-primary">Update Availability</button></a>
-                        <a href="{% url 'delete_availability' property.id availability.id %}"><button class="btn btn-sm btn-danger">Delete Availability</button></a>
                         {% endif %}
+                        <a href="{% url 'update_availability' property.id availability.id %}"><button class="btn btn-sm btn-primary">Update Availability</button></a>
+                        <a id="delete-availability" href="{% url 'delete_availability' property.id availability.id %}"><button id="delete-availability-btn" class="btn btn-sm btn-danger">Delete Availability</button></a>
+                        <p class="delete-availability-output-message text-success"></p>
                     {% endif %}
                     {% if property.user != request.user %}
                         {% if availability.id not in not_available %}
@@ -171,12 +172,13 @@
             {% if property.user == request.user %}
             <div>
                 <h4>Add Availability</h4>
-                <form action="{% url 'add_availability' property.id %}" method="post">
+                <form id="add-availability" action="{% url 'add_availability' property.id %}" method="post">
                     {% csrf_token %}
                     <table>{{availability_form.as_table}}</table>
                     <br>
-                    <input type="submit" class="btn btn-sm btn-success" value="Add">
+                    <input id="add-availability-btn" type="submit" class="btn btn-sm btn-secondary" value="Add">
                 </form>
+                <p class="add-availability-output-message text-success"></p>
             </div>
             {% endif %}
         </div>
@@ -191,12 +193,12 @@
                 <h4 class="text-center mt-2">Review Property</h4>
                 <br>
                 <div class="p-3 text-center">
-                    <form id="add-review-form" class="row g-1" action="{% url 'review_property' property.id %}" method="post">
+                    <form id="add-review" class="row g-1" action="{% url 'review_property' property.id %}" method="post">
                         {% csrf_token %}
                         {{ property_review_form.as_p }}
                         <input type="submit" class="btn btn-primary add-review-btn" value="Add Review">
                     </form>
-                    <p class="review-output-message"></p>
+                    <p class="add-review-output-message"></p>
                 </div>
             </div>
         </div>
@@ -243,17 +245,18 @@ if (likePost) {
 likePost.addEventListener('submit', function (e) {
     e.preventDefault();
     const formData = new FormData();
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
     console.log('formdata: ', formData)
     fetch("{% url 'add_like' property.id %}",{
-    method: 'POST',
-    body: formData
+        method: 'POST',
+        body: formData
     })
     .then(data => {
-    console.log('Success:', data);
-    document.querySelector('#like-post-btn').innerHTML = "Liked <img src='{% static 'images/heart-fill.svg' %}'>"
+        console.log('Success:', data);
+        document.querySelector('#like-post-btn').innerHTML = "Liked <img src='{% static 'images/heart-fill.svg' %}'>"
     })
     .catch(error => {
-            console.error('Error:', error);
+        console.error('Error:', error);
     });
 })
 } else if (unlikePost){
@@ -261,19 +264,90 @@ likePost.addEventListener('submit', function (e) {
 unlikePost.addEventListener('submit', function (e) {
     e.preventDefault();
     const formData = new FormData();
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
     console.log('formdata: ', formData)
     fetch("{% url 'remove_like' property.id %}",{
-    method: 'post',
-    body: formData
+        method: 'post',
+        body: formData
     })
     .then(data => {
-    console.log('Success:', data);
-    document.querySelector('#unlike-post-btn').innerHTML = "Like <img src='{% static 'images/heart.svg' %}'>"
+        console.log('Success:', data);
+        document.querySelector('#unlike-post-btn').innerHTML = "Like <img src='{% static 'images/heart.svg' %}'>"
     })
     .catch(error => {
-            console.error('Error:', error);
+        console.error('Error:', error);
     });
 })
 }
+
+
+// Prevent reload after adding availability
+const addAvailability = document.getElementById('add-availability')
+// const deleteAvailability = document.getElementById('delete-availability')
+let addAvailabilityOutputMessage = document.querySelector('.add-availability-output-message')
+// let deleteAvailabilityOutputMessage = document.querySelector('.delete-availability-output-message')
+
+addAvailability.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const availabilityformData = new FormData();
+    availabilityformData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    availabilityformData.append('from_date', document.getElementById("id_from_date").value)
+    availabilityformData.append('till_date', document.getElementById("id_till_date").value)
+    fetch("{% url 'add_availability' property.id %}",{
+        method: 'POST',
+        body: availabilityformData
+    })
+    .then(data => {
+        document.querySelector('#add-availability-btn').classList.remove('btn-primary')
+        document.querySelector('#add-availability-btn').classList.add('btn-success')
+        addAvailabilityOutputMessage.innerHTML = "Availability added! Add another, or reload to view updates."
+        setTimeout(function(){ 
+            addAvailabilityOutputMessage.style.display = "none";
+            document.querySelector('#add-availability-btn').classList.remove('btn-success')
+            document.querySelector('#add-availability-btn').classList.add('btn-primary')
+        }, 4000);
+        setTimeout(function(){ 
+            addAvailabilityOutputMessage.style.display = "";
+        }, 1000);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+})
+
+
+// Prevent reload after adding review
+const addReview = document.getElementById('add-review')
+let addReviewOutputMessage = document.querySelector('.add-review-output-message')
+let addReviewBtn = document.querySelector('.add-review-btn')
+addReview.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const reviewformData = new FormData();
+    reviewformData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    reviewformData.append('rating', document.getElementById("id_rating").value)
+    reviewformData.append('review_text', document.getElementById("id_review_text").value)
+    fetch("{% url 'review_property' property.id %}",{
+        method: 'POST',
+        body: reviewformData
+    })
+    .then(data => {
+        addReviewBtn.classList.remove('btn-primary')
+        addReviewBtn.classList.add('btn-success')
+        addReviewOutputMessage.innerHTML = "Review added! Add another, or reload to view updates."
+        document.getElementById("id_rating").value = ''
+        document.getElementById("id_review_text").value = ''
+        setTimeout(function(){ 
+            addReviewOutputMessage.style.display = "none";
+            addReviewBtn.classList.remove('btn-success')
+            addReviewBtn.classList.add('btn-primary')
+        }, 4000);
+        setTimeout(function(){ 
+            addReviewOutputMessage.style.display = "";
+        }, 1000);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+})
 </script>
 {% endblock %}
