@@ -200,7 +200,6 @@ class HostProfileView(LoginRequiredMixin, DetailView):
 
 # Like
 @login_required
-@csrf_exempt
 def add_like(request, property_id):
     property = Property.objects.get(id = property_id)
     user = request.user
@@ -210,7 +209,6 @@ def add_like(request, property_id):
     return redirect('property_detail', property_id = property_id)
 
 @login_required
-@csrf_exempt
 def remove_like(request,property_id):
   property = Property.objects.get(id = property_id)
   user = request.user
@@ -218,7 +216,7 @@ def remove_like(request,property_id):
      Like.objects.filter(property = property, user = user).delete()
   return redirect('property_detail', property_id = property_id)
 
-
+@login_required
 def make_reservation(request, property_id, availability_id):
   availability = Availability.objects.get(id = availability_id)
   user = request.user
@@ -228,13 +226,13 @@ def make_reservation(request, property_id, availability_id):
     new_reservation.save()
   return redirect('property_detail', property_id = property_id)
 
-
+@login_required
 def cancel_reservation(request, property_id, availability_id):
   if Reservation.objects.filter(availability = availability_id).exists():
      Reservation.objects.filter(availability = availability_id).delete()
   return redirect('property_detail', property_id = property_id)
 
-
+@login_required
 def reservation_list(request, user_id):
   reservation_list = Reservation.objects.all()
   context = {'reservation_list': reservation_list}
