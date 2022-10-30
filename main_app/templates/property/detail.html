@@ -90,14 +90,12 @@
                         <tr>
                             <td>
                                 {{property_feature.feature}}
-        
                             </td>
-        
                             {% if property.user == request.user %}
                                 <td class="">
-                                    <form action="{% url 'dissociate_property_feature' property.id property_feature.id %}" method="post">
+                                    <form id="remove-feature-{{property_feature.id}}" action="{% url 'dissociate_property_feature' property.id property_feature.id %}" method="post">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn btn-sm btn-danger">X</button>
+                                        <button type="submit" class="btn btn-sm btn-danger remove-feature-{{property_feature.id}}-btn">X</button>
                                     </form>
                                 </td>
                             {% endif %}
@@ -156,9 +154,9 @@
                                 {{property_feature.feature}}
                             </td>
                             <td class="">
-                                <form action="{% url 'associate_property_feature' property.id property_feature.id %}" method="post">
+                                <form id="add-feature-{{property_feature.id}}" action="{% url 'associate_property_feature' property.id property_feature.id %}" method="post">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-sm btn-success">Add</button>
+                                    <button type="submit" class="btn btn-sm btn-secondary add-feature-{{property_feature.id}}-btn">Add</button>
                                 </form>
                             </td>
                         </tr>
@@ -238,46 +236,47 @@ $(document).ready(function(){
   });
 });
 
+
 const likePost = document.getElementById('like-post')
 const unlikePost = document.getElementById('unlike-post')
 if (likePost) {
-// Prevent reload after liking post
-likePost.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-    console.log('formdata: ', formData)
-    fetch("{% url 'add_like' property.id %}",{
-        method: 'POST',
-        body: formData
+    // Prevent reload after liking post
+    likePost.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        console.log('formdata: ', formData)
+        fetch("{% url 'add_like' property.id %}",{
+            method: 'POST',
+            body: formData
+        })
+        .then(data => {
+            console.log('Success:', data);
+            document.querySelector('#like-post-btn').innerHTML = "Liked <img src='{% static 'images/heart-fill.svg' %}'>"
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     })
-    .then(data => {
-        console.log('Success:', data);
-        document.querySelector('#like-post-btn').innerHTML = "Liked <img src='{% static 'images/heart-fill.svg' %}'>"
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-})
 } else if (unlikePost){
-// Prevent reload after unliking post
-unlikePost.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-    console.log('formdata: ', formData)
-    fetch("{% url 'remove_like' property.id %}",{
-        method: 'post',
-        body: formData
+    // Prevent reload after unliking post
+    unlikePost.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        console.log('formdata: ', formData)
+        fetch("{% url 'remove_like' property.id %}",{
+            method: 'post',
+            body: formData
+        })
+        .then(data => {
+            console.log('Success:', data);
+            document.querySelector('#unlike-post-btn').innerHTML = "Like <img src='{% static 'images/heart.svg' %}'>"
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     })
-    .then(data => {
-        console.log('Success:', data);
-        document.querySelector('#unlike-post-btn').innerHTML = "Like <img src='{% static 'images/heart.svg' %}'>"
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-})
 }
 
 
@@ -286,7 +285,6 @@ const addAvailability = document.getElementById('add-availability')
 // const deleteAvailability = document.getElementById('delete-availability')
 let addAvailabilityOutputMessage = document.querySelector('.add-availability-output-message')
 // let deleteAvailabilityOutputMessage = document.querySelector('.delete-availability-output-message')
-
 addAvailability.addEventListener('submit', function (e) {
     e.preventDefault();
     const availabilityformData = new FormData();
@@ -298,7 +296,7 @@ addAvailability.addEventListener('submit', function (e) {
         body: availabilityformData
     })
     .then(data => {
-        document.querySelector('#add-availability-btn').classList.remove('btn-primary')
+        document.querySelector('#add-availability-btn').classList.remove('btn-secondary')
         document.querySelector('#add-availability-btn').classList.add('btn-success')
         addAvailabilityOutputMessage.innerHTML = "Availability added! Add another, or reload to view updates."
         setTimeout(function(){ 
@@ -349,5 +347,49 @@ addReview.addEventListener('submit', function (e) {
         console.error('Error:', error);
     });
 })
+
+
+// Prevent reload after adding property feature
+'{% for feature_id in features_property_doesnt_have_id %}' 
+document.querySelector('#add-feature-{{feature_id}}').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const addFeatureFormData = new FormData();
+            addFeatureFormData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            fetch("{% url 'associate_property_feature' property.id feature_id %}",{
+                method: 'POST',
+                body: addFeatureFormData
+            })
+            .then(data => {
+                document.querySelector('.add-feature-{{feature_id}}-btn').innerHTML = "Added"
+                document.querySelector('.add-feature-{{feature_id}}-btn').classList.remove('btn-secondary')
+                document.querySelector('.add-feature-{{feature_id}}-btn').classList.add('btn-success')
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    })
+'{% endfor %}'
+
+
+// Prevent reload after removing property feature
+'{% for feature in property.property_features.all %}'
+document.querySelector('#remove-feature-{{feature.id}}').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const removeFeatureFormData = new FormData();
+            removeFeatureFormData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            fetch("{% url 'dissociate_property_feature' property.id feature.id %}",{
+                method: 'POST',
+                body: removeFeatureFormData
+            })
+            .then(data => {
+                document.querySelector('.remove-feature-{{feature.id}}-btn').innerHTML = "Deleted"
+                document.querySelector('.remove-feature-{{feature.id}}-btn').classList.remove('btn-danger')
+                document.querySelector('.remove-feature-{{feature.id}}-btn').classList.add('btn-secondary')
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    })
+'{% endfor %}'
 </script>
 {% endblock %}
