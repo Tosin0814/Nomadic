@@ -52,12 +52,13 @@
     {% if property.user == request.user %}
     <div class="col p-3">
         <div class="mt-3">
-            <form action="{% url 'add_photo' property.id %}" enctype="multipart/form-data" method="POST">
+            <form id="image-upload" action="{% url 'add_photo' property.id %}" enctype="multipart/form-data" method="POST">
                 {% csrf_token %}
-                <input type="file" name="photo-file">
+                <input id="photo" type="file" name="photo-file">
                 <br><br>
-                <input type="submit" class="btn btn-sm btn-outline-primary" value="Add Photo">
+                <input type="submit" class="btn btn-sm btn-primary image-upload-btn" value="Add Photo">
             </form>
+            <p class="image-upload-output"></p>
         </div>
         <div class="mt-2 pt-1">
             <a class="text-decoration-none" href="{% url 'delete_photo_page' property.id %}"><button class="btn btn-sm btn-secondary">Edit Photos</button></a>
@@ -239,6 +240,38 @@ $(document).ready(function(){
     $("#carousel").carousel("next");
   });
 });
+
+
+// Prevent reload after uploading image
+if (document.getElementById('image-upload')) {
+    document.getElementById('image-upload').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const imageFormData = new FormData(this);
+        imageFormData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        fetch("{% url 'add_photo' property.id %}",{
+            method: 'POST',
+            body: imageFormData
+        })
+        .then(data => {
+            document.querySelector('.image-upload-btn').value = "Photo Uploaded"
+            document.querySelector('.image-upload-btn').classList.remove('btn-primary')
+            document.querySelector('.image-upload-btn').classList.add('btn-success')
+            document.querySelector('.image-upload-output').innerHTML = "Upload another photo or Reload to view updates."
+            setTimeout(function(){ 
+                document.querySelector('.image-upload-btn').value = "Add Photo"
+                document.querySelector('.image-upload-btn').classList.remove('btn-success')
+                document.querySelector('.image-upload-btn').classList.add('btn-primary')
+                document.querySelector('.image-upload-output').style.display = "none";
+            }, 3000);
+            setTimeout(function(){ 
+                document.querySelector('.image-upload-output').style.display = "";
+            }, 1000);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    })
+}
 
 
 const likePost = document.getElementById('like-post')
