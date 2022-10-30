@@ -116,8 +116,11 @@
                         <button disabled class="btn btn-sm btn-secondary">Reserved</button>
                         {% endif %}
                         <a href="{% url 'update_availability' property.id availability.id %}"><button class="btn btn-sm btn-primary">Update Availability</button></a>
-                        <a id="delete-availability" href="{% url 'delete_availability' property.id availability.id %}"><button id="delete-availability-btn" class="btn btn-sm btn-danger">Delete Availability</button></a>
-                        <p class="delete-availability-output-message text-success"></p>
+                        <form id="delete-availability-{{availability.id}}" action="{% url 'delete_availability' property.id availability.id %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-sm btn-danger delete-availability-{{availability.id}}-btn">Delete Availability</button>
+                        </form>
+                        <p class="delete-availability-{{availability.id}}-output-message text-success"></p>
                     {% endif %}
                     {% if property.user != request.user %}
                         {% if availability.id not in not_available %}
@@ -312,6 +315,29 @@ addAvailability.addEventListener('submit', function (e) {
         console.error('Error:', error);
     });
 })
+
+
+// Prevent reload after removing availability
+'{% for availability in property.availability_set.all %}'
+document.querySelector('#delete-availability-{{availability.id}}').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const removeAvailabilityFormData = new FormData();
+            removeAvailabilityFormData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            fetch("{% url 'delete_availability' property.id availability.id %}",{
+                method: 'POST',
+                body: removeAvailabilityFormData
+            })
+            .then(data => {
+                document.querySelector('.delete-availability-{{availability.id}}-output-message').innerHTML = 'Availability deleted! Reload page to view update.'
+                document.querySelector('.delete-availability-{{availability.id}}-btn').innerHTML = "Deleted!"
+                document.querySelector('.delete-availability-{{availability.id}}-btn').classList.remove('btn-danger')
+                document.querySelector('.delete-availability-{{availability.id}}-btn').classList.add('btn-secondary')
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    })
+'{% endfor %}'
 
 
 // Prevent reload after adding review
