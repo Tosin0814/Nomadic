@@ -69,6 +69,7 @@ def property_detail(request, property_id):
   reservation_user = Reservation.objects.filter(property = property_id, user=request.user).values_list('user', flat=True)
   property_review_form = PropertyReviewForm
   features_property_doesnt_have = PropertyFeature.objects.exclude(id__in = property.property_features.all().values_list('id'))
+  features_property_doesnt_have_id = PropertyFeature.objects.exclude(id__in = property.property_features.all().values_list('id')).values_list("id", flat=True)
   availability_form = AvailabilityForm
   return render(request, 'property/detail.html',{
     'property': property,
@@ -77,7 +78,8 @@ def property_detail(request, property_id):
     'property_review_form' : property_review_form,
     'user_like': user_like,
     'not_available' : not_available,
-    'reservation_user': reservation_user
+    'reservation_user': reservation_user,
+    'features_property_doesnt_have_id': features_property_doesnt_have_id
   })
 
 class PropertyCreate(LoginRequiredMixin, CreateView):
