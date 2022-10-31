@@ -7,7 +7,7 @@
 
 ## Landing page
 
-<img src = "main_app/static/images/markdown/Landing Page.png">
+<img src = "main_app/static/images/markdown/Landing page.png">
 
 - Non-login User can view all listing properties - with property title, place, and price.
 
