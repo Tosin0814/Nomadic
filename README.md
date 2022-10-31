@@ -1,68 +1,70 @@
-# nomadic
+# Nomadic
 
-- Nomadic is a Python & Django web application, where hosts rent out their properties to travellers looking for a place to stay.
+- Nomadic is a Django web application, where hosts rent out their properties to travellers looking for a place to stay.
 
 
-# ScreenShots
+# Screenshots
 
-## Landing page
+## Landing Page
 
 <img src = "main_app/static/images/markdown/Landing page.png">
 
-- Non-login User can view all listing properties - with property title, place, and price.
+- A not logged in user can view all listed properties - with the property title, location, and price.
 
 ## My Profile Page
 
 <img src = "main_app/static/images/markdown/My Profile.png">
 
-- Login User have access to user profile page, user can add/edit profile photo, and edit user information.
+- A logged in user has access to user profile page, the user can add/edit profile photo, and edit user information.
 
-- In profile page, user can checkout their 'Posted Properties' - As the Host.
+- In profile page, the user can check out their 'Posted Properties' - As the Host.
 
-- In profile page, user can checkout their 'Liked Properties' - As the traveller.
+- In profile page, the user can also check out their 'Liked Properties' - As the traveller.
 
-## Host adding properties & modifing 'Posted Property' detail page
+## Host Adding Properties & Modifying 'Posted Property' Detail Page
 
 <img src = "main_app/static/images/markdown/Add Property.png">
 
-- Host input basic property information in 'Add Property' page.
+- The host inputs basic property information on the 'Add Property' page.
 
 <img src = "main_app/static/images/markdown/Property Detail - Host 1.png">
 <img src = "main_app/static/images/markdown/Property Detail - Host 2.png">
 
-- In property detail page
+- On the property detail page, the host can;
 
-    - Host can add/edit property photos
-    - Host can edit/delete property information
-    - Host can add/delete property features - features are defined by admin and cannot modify by user
-    - Host can add/update/delete Availability time for travellers
+    - Add/edit property photos
+    - Edit/delete property information
+    - Add/delete property features - features are defined by admin and cannot modify by user
+    - Add/update/delete Availability for travellers
 
-## Traveller checking out properties detail & making reservation on property
+## Traveller Checking Out Property Details & Making Reservation on Property
 
 <img src = "main_app/static/images/markdown/Property Detail - Traveller 1.png">
 <img src = "main_app/static/images/markdown/Property Detail - Traveller 2.png">
 
-- In property detail page
+- On the property detail page, the traveller can;
 
-    - Traveller can check out the host information and property detail information
-    - Traveller can checkout property features
-    - Traveller can make/cancel reservation on the property based on the availability
-    - Travell can leave a review and rating for the host&property
+    - Check out the host's information and property information
+    - Check out property features
+    - Make/cancel reservation on the property based on the availability
+    - Leave a review and rating for the host & property
 
-## My Reservation page for traveller
+## My Reservations Page for Traveller
 
 <img src = "main_app/static/images/markdown/My Reservation.png">
 
-- Traveller can check out the reservation information on the property they booked. 
+- Traveller can check out the reservation information on the properties they reserved. 
 
 
 # Technologies Used
 
+- HTML
 - Python
 - django
-- AJAX
+- PostgreSQL
+- JavaScript
 - Boostrap
-- css
+- CSS
 - AWS S3
 - Heroku
 
@@ -74,5 +76,10 @@
     https://nomadic-app.herokuapp.com/ 
 
 
+# Next Steps
 
-    
+- Average rating of property listing
+- Make Nomadic mobile friendly
+- Search by name, user or location
+- Upload multiple photos at once
+
