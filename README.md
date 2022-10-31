@@ -27,8 +27,8 @@
 
 - Host input basic property information in 'Add Property' page.
 
-<img src = "main_app/static/images/markdown/Property Detail - 1.png">
-<img src = "main_app/static/images/markdown/Property Detail - 2.png">
+<img src = "main_app/static/images/markdown/Property Detail - Host 1.png">
+<img src = "main_app/static/images/markdown/Property Detail - Host 2.png">
 
 - In property detail page
 
@@ -37,6 +37,23 @@
     - Host can add/delete property features - features are defined by admin and cannot modify by user
     - Host can add/update/delete Availability time for travellers
 
+## Traveller checking out properties detail & making reservation on property
+
+<img src = "main_app/static/images/markdown/Property Detail - Traveller 1.png">
+<img src = "main_app/static/images/markdown/Property Detail - Traveller 2.png">
+
+- In property detail page
+
+    - Traveller can check out the host information and property detail information
+    - Traveller can checkout property features
+    - Traveller can make/cancel reservation on the property based on the availability
+    - Travell can leave a review and rating for the host&property
+
+## My Reservation page for traveller
+
+<img src = "main_app/static/images/markdown/My Reservation.png">
+
+- Traveller can check out the reservation information on the property they booked. 
 
 
 # Technologies Used
