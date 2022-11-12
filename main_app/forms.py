@@ -7,9 +7,6 @@ from django.forms import ModelForm
 from main_app.models import Availability, Review,Like
 
 
-
-# Extend User
-
 class NewUserForm(UserCreationForm):
     email = forms.EmailField(required=True)
     first_name = forms.CharField(max_length=50, required=True)
@@ -25,10 +22,10 @@ class NewUserForm(UserCreationForm):
         model = User
         fields = ("username", "first_name", "last_name", "email", "password1", "password2")
 
-# Add Availability
 
 class DateInput(forms.DateInput):
     input_type = 'date'
+
 
 class AvailabilityForm(ModelForm):
     class Meta:
@@ -40,12 +37,11 @@ class AvailabilityForm(ModelForm):
         }
 
 
-# Add review form
-
 class PropertyReviewForm(ModelForm):
     class Meta:
         model = Review
         fields = ['rating', 'review_text']
+
 
 class LikeForm(ModelForm):
     class Meta:
