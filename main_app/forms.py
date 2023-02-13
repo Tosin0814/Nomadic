@@ -8,9 +8,9 @@ from main_app.models import Availability, Review,Like
 
 
 class NewUserForm(UserCreationForm):
-    email = forms.EmailField(required=True)
-    first_name = forms.CharField(max_length=50, required=True)
-    last_name = forms.CharField(max_length=50, required=True)
+    # email = forms.EmailField(required=True)
+    # first_name = forms.CharField(max_length=50, required=True)
+    # last_name = forms.CharField(max_length=50, required=True)
     
     def __init__(self, *args, **kwargs):
         super(NewUserForm, self).__init__(*args, **kwargs)
@@ -21,6 +21,14 @@ class NewUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("username", "first_name", "last_name", "email", "password1", "password2")
+        widgets = {
+            'username' : forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name' : forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name' : forms.TextInput(attrs={'class': 'form-control'}),
+            'email' : forms.EmailInput(attrs={'class': 'form-control'}),
+            'password1' : forms.PasswordInput(attrs={'class': 'form-control'}),
+            'password2' : forms.PasswordInput(attrs={'class': 'form-control'}),
+        }
 
 
 class DateInput(forms.DateInput):
@@ -41,6 +49,10 @@ class PropertyReviewForm(ModelForm):
     class Meta:
         model = Review
         fields = ['rating', 'review_text']
+        widgets = {
+            'rating': forms.Select(attrs={'class': 'form-control'}),
+            'review_text' : forms.Textarea(attrs={'class': 'form-control'})
+        }
 
 
 class LikeForm(ModelForm):

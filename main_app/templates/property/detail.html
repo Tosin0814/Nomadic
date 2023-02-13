@@ -196,9 +196,15 @@
                 <h4 class="text-center mt-2">Review Property</h4>
                 <br>
                 <div class="p-3 text-center">
-                    <form id="add-review" class="row g-1" action="{% url 'review_property' property.id %}" method="post">
+                    <form id="add-review" class="row-1" action="{% url 'review_property' property.id %}" method="post">
                         {% csrf_token %}
-                        {{ property_review_form.as_p }}
+                        <div class="col w-100">
+                            <p class="m-0"><b>Rating: </b></p>
+                            <p>{{ property_review_form.rating }}</p>
+                            <br>
+                            <p class="m-0"><b>Review Text: </b></p>
+                            <p>{{ property_review_form.review_text }}</p>
+                        </div>
                         <input type="submit" class="btn btn-primary add-review-btn" value="Add Review">
                     </form>
                     <p class="add-review-output-message"></p>
